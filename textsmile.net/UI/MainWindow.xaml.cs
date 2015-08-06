@@ -65,7 +65,8 @@ namespace textsmile.net.UI {
          CreateNotifyIcon();
          GetMainWindowVM.HotkeyPressed += hotkeyManagerOnKeyPressed;
          Visibility = Visibility.Hidden;
-         HotkeyTextBox.Text = constructHotkeyText(GetMainWindowVM.GetHotkey().Key, GetMainWindowVM.GetHotkey().Modifiers);
+
+         HotkeyTextBox.Text = GetMainWindowVM.ConstructHotkeyText(GetMainWindowVM.GetHotkey().Key, GetMainWindowVM.GetHotkey().Modifiers);
       }
 
       protected override void OnClosing(CancelEventArgs e) {
@@ -112,28 +113,8 @@ namespace textsmile.net.UI {
             mods = mods | ModifierKeys.Windows;
          }
 
-         HotkeyTextBox.Text = constructHotkeyText(key, mods);
+         HotkeyTextBox.Text = GetMainWindowVM.ConstructHotkeyText(key, mods);
          GetMainWindowVM.SetHotkey(key, mods);
-      }
-
-      private string constructHotkeyText(Key key, ModifierKeys mods) {
-         var sb = new StringBuilder(32);
-         if ((mods & ModifierKeys.Control) != 0) {
-            sb.Append("Ctrl+");
-         }
-         if ((mods & ModifierKeys.Shift) != 0) {
-            sb.Append("Shift+");
-         }
-         if ((mods & ModifierKeys.Alt) != 0) {
-            sb.Append("Alt+");
-         }
-         if ((mods & ModifierKeys.Windows) != 0) {
-            sb.Append("Win+");
-         }
-
-         sb.Append(key.ToString());
-
-         return sb.ToString();
       }
 
       private void OnWindowDeactivated(object sender, EventArgs e) {

@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Text;
 using System.Windows;
 using System.Windows.Input;
 using BegawkEditorUtilities;
@@ -44,9 +45,46 @@ namespace textsmile.net.VM {
             Items.Add(InstantiateWrapper());
          });
 
+         HelpCommand = new ActionCommand(showHelp);
+
          _hotkeyManager = App.Container.Resolve<HotKeyManager>();
          _hotkeyManager.KeyPressed += hotkeyManagerOnKeyPressed;
          _hotkey = new HotKey();
+      }
+
+      private void showHelp() {
+         var sb = new StringBuilder();
+         sb.Append(
+            $"To toggle visibility of window press hotkey combination ({ConstructHotkeyText(_hotkey.With(h => h.Key), _hotkey.With(h => h.Modifiers))})")
+            .AppendLine()
+            .AppendLine()
+            .Append("To edit item hold Ctrl modifier on your keyboard and click to that item")
+            .AppendLine()
+            .AppendLine()
+            .Append("To remove item immediatly hold Shift modifier and click red button next to item")
+            .AppendLine();
+
+         MessageBox.Show(sb.ToString(), "Help", MessageBoxButton.OK, MessageBoxImage.Information);
+      }
+
+      public string ConstructHotkeyText(Key key, ModifierKeys mods) {
+         var sb = new StringBuilder(32);
+         if ((mods & ModifierKeys.Control) != 0) {
+            sb.Append("Ctrl+");
+         }
+         if ((mods & ModifierKeys.Shift) != 0) {
+            sb.Append("Shift+");
+         }
+         if ((mods & ModifierKeys.Alt) != 0) {
+            sb.Append("Alt+");
+         }
+         if ((mods & ModifierKeys.Windows) != 0) {
+            sb.Append("Win+");
+         }
+
+         sb.Append(key.ToString());
+
+         return sb.ToString();
       }
 
       private void hotkeyManagerOnKeyPressed(object sender, KeyPressedEventArgs e) {
@@ -97,6 +135,7 @@ namespace textsmile.net.VM {
       }
 
       public ICommand AddCommand { get; set; }
+      public ICommand HelpCommand { get; set; }
 
       public void OnLoad() {
          Debug.WriteLine("--->> OnLoad fired ");
