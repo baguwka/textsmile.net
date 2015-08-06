@@ -6,6 +6,7 @@ using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Input;
 using GlobalHotKey;
+using textsmile.net.Model;
 using textsmile.net.VM;
 using KeyEventArgs = System.Windows.Input.KeyEventArgs;
 
@@ -76,9 +77,9 @@ namespace textsmile.net.UI {
 
       protected override void OnClosed(EventArgs e) {
          GetViewModel.OnClosed();
-         base.OnClosed(e);
-         notify.Visible = false;
+         notify.With(n => n.Visible = false);
          notify = null;
+         base.OnClosed(e);
       }
 
       private void Hotkey_PreviewKeydDown(object sender, KeyEventArgs e) {
