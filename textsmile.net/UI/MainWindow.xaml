@@ -14,18 +14,19 @@
         AllowsTransparency="True"
         Background="Transparent"
         BorderThickness="0"
+        Icon="/Resources/icon32x32.ico"
         Visibility="{Binding Visibility, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">
 
     <Window.DataContext>
         <vm:MainWindowVM/>
     </Window.DataContext>
-    
+
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="45"/>
             <RowDefinition/>
+            <RowDefinition Height="45"/>
         </Grid.RowDefinitions>
-        
+
         <!--<Menu Grid.Row="0" VerticalAlignment="Top">
             <MenuItem Header="File">
                 <MenuItem Header="Save" Command ="{Binding SaveCommand}"/>
@@ -35,29 +36,29 @@
             </MenuItem>
         </Menu>-->
 
-        <StackPanel Grid.Row="0" Margin="1" Orientation="Vertical">
+        <StackPanel Grid.Row="1" Margin="1" Orientation="Vertical">
             <DockPanel>
                 <TextBlock DockPanel.Dock="Left" Text="Hotkey" Width="70" TextAlignment="Center"/>
                 <TextBox DockPanel.Dock="Right" Height="20" CaretBrush="White" Name="HotkeyTextBox" PreviewKeyDown="Hotkey_PreviewKeydDown"/>
             </DockPanel>
             <Button Content="Add" Command="{Binding AddCommand}" Height="18" Width="100" Margin="2"/>
         </StackPanel>
-        
-        <ListView BorderThickness="0" Grid.Row="1" Background="Transparent"
-                  ItemsSource="{Binding Items, UpdateSourceTrigger=PropertyChanged}"
-                  SelectedIndex="{Binding SelectedItemIndex, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                  SelectedItem="{Binding SelectedItem, UpdateSourceTrigger=PropertyChanged}">
-            <ListView.Resources>
-                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="Transparent" />
-                <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}" Color="Transparent" />
-                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="Black" />
-            </ListView.Resources>
-            <ListView.ItemTemplate>
+
+        <ItemsControl BorderThickness="0" Grid.Row="0" Background="Transparent"
+                  ItemsSource="{Binding Items, UpdateSourceTrigger=PropertyChanged}">
+
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <VirtualizingStackPanel VerticalAlignment="Bottom"/>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+
+            <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <DockPanel LastChildFill="True">
+                    <DockPanel LastChildFill="True" HorizontalAlignment="Stretch">
                         <Button DockPanel.Dock="Right" Width="25" Height="25" Background="DarkRed" 
                                 Foreground="White" Content="x" Command="{Binding RemoveCommand}"/>
-                        
+
                         <TextBox DockPanel.Dock="Left" FontFamily="Tahoma" TextWrapping="NoWrap" HorizontalAlignment="Stretch" Height="25" 
                                  Text="{Binding Content, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FontSize="12" Padding="4">
                             <TextBox.InputBindings>
@@ -66,7 +67,7 @@
                         </TextBox>
                     </DockPanel>
                 </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
     </Grid>
 </Window>
