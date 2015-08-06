@@ -12,16 +12,13 @@ using ItemDesigner.Commands;
 using Microsoft.Practices.Unity;
 using textsmile.net.Annotations;
 using textsmile.net.Model;
-using MessageBox = System.Windows.MessageBox;
 
 namespace textsmile.net.VM {
    public sealed class MainWindowVM : IVM, INotifyPropertyChanged {
       private SmartCollection<SmileWrapper> _items;
-      private int _selectedItemIndex;
-      private SmileWrapper _selectedItem;
 
-      private HotKey hotkey;
-      private HotKeyManager hotkeyManager;
+      private HotKey _hotkey;
+      private readonly HotKeyManager _hotkeyManager;
       private Visibility _visibility;
 
       public event EventHandler<KeyPressedEventArgs> HotkeyPressed;
@@ -47,13 +44,14 @@ namespace textsmile.net.VM {
             Items.Add(InstantiateWrapper());
          });
 
-         hotkeyManager = App.Container.Resolve<HotKeyManager>();
-         hotkeyManager.KeyPressed += hotkeyManagerOnKeyPressed;
+         _hotkeyManager = App.Container.Resolve<HotKeyManager>();
+         _hotkeyManager.KeyPressed += hotkeyManagerOnKeyPressed;
+         _hotkey = new HotKey();
       }
 
       private void hotkeyManagerOnKeyPressed(object sender, KeyPressedEventArgs e) {
-         if (!e.HotKey.Equals(hotkey)) return;
-         OnHotkeyPressed(e);
+         if (!e.HotKey.Equals(_hotkey)) return;
+         onHotkeyPressed(e);
       }
 
       public SmileWrapper InstantiateWrapper() {
@@ -76,7 +74,14 @@ namespace textsmile.net.VM {
             },
 
             wrapper => {
-               Visibility = Visibility.Hidden;
+               if (Keyboard.Modifiers.HasFlag(ModifierKeys.Control)) {
+
+               }
+               else {
+                  if (!string.IsNullOrEmpty(wrapper.Content)) {
+                     Visibility = Visibility.Hidden;
+                  }
+               }
             });
       }
 
@@ -91,28 +96,6 @@ namespace textsmile.net.VM {
          }
       }
 
-      public int SelectedItemIndex {
-         get { return _selectedItemIndex; }
-         set {
-            if (value == _selectedItemIndex) {
-               return;
-            }
-            _selectedItemIndex = value;
-            OnPropertyChanged();
-         }
-      }
-
-      public SmileWrapper SelectedItem {
-         get { return _selectedItem; }
-         set {
-            if (Equals(value, _selectedItem)) {
-               return;
-            }
-            _selectedItem = value;
-            OnPropertyChanged();
-         }
-      }
-
       public ICommand AddCommand { get; set; }
 
       public void OnLoad() {
@@ -120,22 +103,26 @@ namespace textsmile.net.VM {
 
          Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
 
-         MainVMSaveData mainVMData;
-         if (SaveLoadManager.TryLoadBin("textsmile.net main", out mainVMData)) {
-            if (mainVMData.smiles != null) {
-               LoadSmiles(mainVMData.smiles.Select(InstantiateWrapper));
-            }
-         }
-
+         //todo: check data.Key for .None and set default or something
          SetHotkey(Key.N, ModifierKeys.Windows);
+         MainVMSaveData data;
+         if (SaveLoadManager.TryLoadRaw("textsmile.net main", out data)) {
+            if (data.smiles != null) {
+               LoadSmiles(data.smiles.Select(InstantiateWrapper));
+            }
+            SetHotkey(data.Key, data.ModsKeys);
+         }
       }
 
       public void OnClosing() {
-         if (hotkey != null) {
-            hotkeyManager.Unregister(hotkey);
+         if (_hotkey != null) {
+            _hotkeyManager.Unregister(_hotkey);
          }
 
-         SaveLoadManager.SaveBin("textsmile.net main", new MainVMSaveData(Items));
+         SaveLoadManager.SaveRaw("textsmile.net main", new MainVMSaveData(Items) {
+            Key = _hotkey.With(i => i.Key, Key.N),
+            ModsKeys = _hotkey.With(h => h.Modifiers, ModifierKeys.Windows)
+         });
       }
 
       public void OnClosed() {
@@ -149,16 +136,16 @@ namespace textsmile.net.VM {
 
       public void SetHotkey(Key key, ModifierKeys mods) {
          Debug.WriteLine("--->> SetHotkey " + key + " and mods " + mods);
-         if (hotkey != null) {
-            hotkeyManager.Unregister(hotkey);
+         if (_hotkey != null) {
+            _hotkeyManager.Unregister(_hotkey);
          }
 
-         hotkey = new HotKey(key, mods);
-         hotkeyManager.Register(hotkey);
+         _hotkey = new HotKey(key, mods);
+         _hotkeyManager.Register(_hotkey);
       }
 
       public HotKey GetHotkey() {
-         return hotkey ?? new HotKey(Key.N, ModifierKeys.Windows);
+         return _hotkey ?? new HotKey(Key.N, ModifierKeys.Windows);
       }
 
       public event PropertyChangedEventHandler PropertyChanged;
@@ -166,12 +153,10 @@ namespace textsmile.net.VM {
       [NotifyPropertyChangedInvocator]
       private void OnPropertyChanged([CallerMemberName] string propertyName = null) {
          var handler = PropertyChanged;
-         if (handler != null) {
-            handler(this, new PropertyChangedEventArgs(propertyName));
-         }
+         handler?.Invoke(this, new PropertyChangedEventArgs(propertyName));
       }
 
-      private void OnHotkeyPressed(KeyPressedEventArgs e) {
+      private void onHotkeyPressed(KeyPressedEventArgs e) {
          HotkeyPressed?.Invoke(this, e);
       }
    }
@@ -179,6 +164,8 @@ namespace textsmile.net.VM {
    [Serializable]
    public class MainVMSaveData : CommonSaveData {
       public List<string> smiles { get; set; }
+      public Key Key { get; set; }
+      public ModifierKeys ModsKeys { get; set; }
 
       public MainVMSaveData(IEnumerable<SmileWrapper> wrappers) {
          if (wrappers != null) {

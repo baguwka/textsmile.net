@@ -7,9 +7,7 @@ using System.Windows.Forms;
 using System.Windows.Input;
 using GlobalHotKey;
 using textsmile.net.VM;
-using Clipboard = System.Windows.Clipboard;
 using KeyEventArgs = System.Windows.Input.KeyEventArgs;
-using MessageBox = System.Windows.MessageBox;
 
 namespace textsmile.net.UI {
    /// <summary>
@@ -38,7 +36,7 @@ namespace textsmile.net.UI {
       private void CreateNotifyIcon() {
          notify = new NotifyIcon {
             Text = @"Textsmile.net",
-            Icon = new Form().Icon,
+            Icon = Properties.Resources.icon16x16,
             ContextMenu = new WindowContextMenu((sender, args) => {
                Close();
             })

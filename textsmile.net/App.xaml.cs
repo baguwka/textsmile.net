@@ -1,5 +1,6 @@
-﻿using System.Windows;
-using BegawkEditorUtilities;
+﻿using System.Diagnostics;
+using System.Linq;
+using System.Windows;
 using GlobalHotKey;
 using Microsoft.Practices.Unity;
 
@@ -18,8 +19,24 @@ namespace textsmile.net {
 
       private void AppStartup(object sender, StartupEventArgs e) {
          //ConsoleManager.Show();
+         isAppAlreadyRunning();
          _container = new UnityContainer();
          _container.RegisterType<HotKeyManager>(new ContainerControlledLifetimeManager());
+      }
+
+      //todo: use mutex
+      private void isAppAlreadyRunning() {
+         Process currentProcess = Process.GetCurrentProcess();
+
+         var processes = Process.GetProcessesByName(currentProcess.ProcessName);
+
+         if (processes.Any(p => p.Id != currentProcess.Id)) {
+            MessageBox.Show("Another instance is already running.", "Application already running",
+            MessageBoxButton.OK, MessageBoxImage.Exclamation);
+
+            Current.Shutdown();
+            return;
+         }
       }
    }
 }
