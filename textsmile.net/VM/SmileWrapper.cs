@@ -17,7 +17,9 @@ namespace textsmile.net.VM {
          });
 
          ClickCommand = new ActionCommand(() => {
-            Clipboard.SetText(Content);
+            if (!string.IsNullOrEmpty(Content)) {
+               Clipboard.SetText(Content);
+            }
             _raiseClick?.Invoke(this);
          });
       }

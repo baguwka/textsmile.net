@@ -78,7 +78,9 @@ namespace textsmile.net.VM {
 
                }
                else {
-                  Visibility = Visibility.Hidden;
+                  if (!string.IsNullOrEmpty(wrapper.Content)) {
+                     Visibility = Visibility.Hidden;
+                  }
                }
             });
       }
@@ -104,7 +106,7 @@ namespace textsmile.net.VM {
          //todo: check data.Key for .None and set default or something
          SetHotkey(Key.N, ModifierKeys.Windows);
          MainVMSaveData data;
-         if (SaveLoadManager.TryLoadBin("textsmile.net main", out data)) {
+         if (SaveLoadManager.TryLoadRaw("textsmile.net main", out data)) {
             if (data.smiles != null) {
                LoadSmiles(data.smiles.Select(InstantiateWrapper));
             }
@@ -117,7 +119,7 @@ namespace textsmile.net.VM {
             _hotkeyManager.Unregister(_hotkey);
          }
 
-         SaveLoadManager.SaveBin("textsmile.net main", new MainVMSaveData(Items) {
+         SaveLoadManager.SaveRaw("textsmile.net main", new MainVMSaveData(Items) {
             Key = _hotkey.With(i => i.Key, Key.N),
             ModsKeys = _hotkey.With(h => h.Modifiers, ModifierKeys.Windows)
          });

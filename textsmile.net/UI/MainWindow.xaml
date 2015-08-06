@@ -44,30 +44,32 @@
             <Button Content="Add" Command="{Binding AddCommand}" Height="18" Width="100" Margin="2"/>
         </StackPanel>
 
-        <ItemsControl BorderThickness="0" Grid.Row="0" Background="Transparent"
-                  ItemsSource="{Binding Items, UpdateSourceTrigger=PropertyChanged}">
+        <ScrollViewer Grid.Row="0" HorizontalScrollBarVisibility="Auto">
+            <ItemsControl BorderThickness="0" Background="Transparent"
+                      ItemsSource="{Binding Items, UpdateSourceTrigger=PropertyChanged}">
 
-            <ItemsControl.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <VirtualizingStackPanel VerticalAlignment="Bottom"/>
-                </ItemsPanelTemplate>
-            </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <VirtualizingStackPanel VerticalAlignment="Bottom"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
 
-            <ItemsControl.ItemTemplate>
-                <DataTemplate>
-                    <DockPanel LastChildFill="True" HorizontalAlignment="Stretch">
-                        <Button DockPanel.Dock="Right" Width="25" Height="25" Background="DarkRed" 
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <DockPanel LastChildFill="True" HorizontalAlignment="Stretch">
+                            <Button DockPanel.Dock="Right" Width="25" Height="25" Background="DarkRed" 
                                 Foreground="White" Content="x" Command="{Binding RemoveCommand}"/>
 
-                        <TextBox DockPanel.Dock="Left" FontFamily="Tahoma" TextWrapping="NoWrap" HorizontalAlignment="Stretch" Height="25" 
+                            <TextBox DockPanel.Dock="Left" FontFamily="Tahoma" TextWrapping="NoWrap" HorizontalAlignment="Stretch" Height="25" 
                                  Text="{Binding Content, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FontSize="12" Padding="4">
-                            <TextBox.InputBindings>
-                                <MouseBinding MouseAction="LeftClick" Command="{Binding ClickCommand}"/>
-                            </TextBox.InputBindings>
-                        </TextBox>
-                    </DockPanel>
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
-        </ItemsControl>
+                                <TextBox.InputBindings>
+                                    <MouseBinding MouseAction="LeftClick" Command="{Binding ClickCommand}"/>
+                                </TextBox.InputBindings>
+                            </TextBox>
+                        </DockPanel>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
     </Grid>
 </Window>
