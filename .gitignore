@@ -1,4 +1,4 @@
-﻿*.csproj
+*.csproj
 *.pidb
 *.sln
 *.userprefs
@@ -87,3 +87,5 @@ $RECYCLE.BIN/
 
 # Mac crap
 .DS_Store
+packages/
+*.DotSettings
