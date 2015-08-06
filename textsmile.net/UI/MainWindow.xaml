@@ -45,7 +45,7 @@
             <Button Content="Add" Command="{Binding AddCommand}" Height="18" Width="100" Margin="2"/>
         </StackPanel>
 
-        <ScrollViewer Grid.Row="0" HorizontalScrollBarVisibility="Auto">
+        <ScrollViewer Grid.Row="0" VerticalScrollBarVisibility="Auto">
             <ItemsControl BorderThickness="0" Background="Transparent"
                       ItemsSource="{Binding Items, UpdateSourceTrigger=PropertyChanged}">
 
