@@ -29,15 +29,15 @@ namespace UnitTests.IO {
          return new TestData {
             Key = Key.K,
             ModsKeys = ModifierKeys.Windows & ModifierKeys.Alt,
-            Lst = new List<string>{"first", "second", "third"},
+            Lst = new List<string> {"first", "second", "third"},
             Str = "Name"
          };
       }
 
-	  [Test]
+      [Test]
       public void SaveTest() {
          string serialized = Encoding.UTF8.GetString(Properties.Resources.test);
-	     string result = string.Empty;
+         string result = string.Empty;
 
          var uc = new UnityContainer();
          configureContainer(uc);
@@ -54,7 +54,7 @@ namespace UnitTests.IO {
          var data = createTestData();
          manager.Save("test", data);
 
-		 Assert.That(serialized, Is.EqualTo(result));
+         Assert.That(serialized, Is.EqualTo(result));
       }
 
       [Test]
