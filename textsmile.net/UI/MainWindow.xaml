@@ -9,11 +9,9 @@
         Title="textsmile.net" 
         ShowInTaskbar="False"
         WindowStartupLocation="CenterScreen"
-        Height="350" Width="275" ResizeMode="NoResize"
-        WindowStyle="None"
-        AllowsTransparency="True"
-        Background="Transparent"
-        BorderThickness="0"
+        Height="375" Width="275" ResizeMode="CanResize"
+        MaxHeight="800" MaxWidth="275"
+        WindowStyle="ThreeDBorderWindow"
         Icon="/Resources/icon32x32.ico"
         Visibility="{Binding Visibility, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">
 

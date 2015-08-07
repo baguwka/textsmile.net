@@ -6,13 +6,14 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Windows;
+using System.Windows.Forms;
 using System.Windows.Input;
-using BegawkEditorUtilities;
 using GlobalHotKey;
-using ItemDesigner.Commands;
 using Microsoft.Practices.Unity;
 using textsmile.net.Annotations;
 using textsmile.net.Model;
+using Clipboard = System.Windows.Clipboard;
+using MessageBox = System.Windows.MessageBox;
 
 namespace textsmile.net.VM {
    public sealed class MainWindowVM : IVM, INotifyPropertyChanged {
@@ -113,11 +114,14 @@ namespace textsmile.net.VM {
 
             wrapper => {
                if (Keyboard.Modifiers.HasFlag(ModifierKeys.Control)) {
-
                }
                else {
                   if (!string.IsNullOrEmpty(wrapper.Content)) {
                      Visibility = Visibility.Hidden;
+                     if (!string.IsNullOrEmpty(wrapper.Content)) {
+                        Clipboard.SetText(wrapper.Content);
+                        //SendKeys.SendWait(wrapper.Content);
+                     }
                   }
                }
             });
@@ -140,12 +144,11 @@ namespace textsmile.net.VM {
       public void OnLoad() {
          Debug.WriteLine("--->> OnLoad fired ");
 
-         Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-
          //todo: check data.Key for .None and set default or something
          SetHotkey(Key.N, ModifierKeys.Windows);
          MainVMSaveData data;
-         if (SaveLoadManager.TryLoadRaw("textsmile.net main", out data)) {
+         
+         if (App.Container.Resolve<IoManager>().TryLoad("textsmile.net main", out data)) {
             if (data.smiles != null) {
                LoadSmiles(data.smiles.Select(InstantiateWrapper));
             }
@@ -158,7 +161,7 @@ namespace textsmile.net.VM {
             _hotkeyManager.Unregister(_hotkey);
          }
 
-         SaveLoadManager.SaveRaw("textsmile.net main", new MainVMSaveData(Items) {
+         App.Container.Resolve<IoManager>().Save("textsmile.net main", new MainVMSaveData(Items) {
             Key = _hotkey.With(i => i.Key, Key.N),
             ModsKeys = _hotkey.With(h => h.Modifiers, ModifierKeys.Windows)
          });

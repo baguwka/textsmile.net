@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.21005.1
+# Visual Studio 14
+VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "textsmile.net", "textsmile.net\textsmile.net.csproj", "{39A49FD7-3418-48E9-8804-2A11864AE2B3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTests", "UnitTests\UnitTests.csproj", "{F1723305-0951-41CC-87E3-3EBCB228F4C6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{39A49FD7-3418-48E9-8804-2A11864AE2B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{39A49FD7-3418-48E9-8804-2A11864AE2B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{39A49FD7-3418-48E9-8804-2A11864AE2B3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F1723305-0951-41CC-87E3-3EBCB228F4C6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F1723305-0951-41CC-87E3-3EBCB228F4C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F1723305-0951-41CC-87E3-3EBCB228F4C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F1723305-0951-41CC-87E3-3EBCB228F4C6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
