@@ -1,5 +1,5 @@
 ﻿using System;
-using textsmile.net.Annotations;
+using JetBrains.Annotations;
 
 namespace textsmile.net.Model {
    [UsedImplicitly]
@@ -9,7 +9,13 @@ namespace textsmile.net.Model {
       private readonly ISerializer _io;
       private readonly IDataProvider _provider;
 
-      public SaveLoadController(ISerializer io, IDataProvider provider) {
+      public SaveLoadController([NotNull] ISerializer io, [NotNull] IDataProvider provider) {
+         if (io == null) {
+            throw new ArgumentNullException(nameof(io));
+         }
+         if (provider == null) {
+            throw new ArgumentNullException(nameof(provider));
+         }
          _io = io;
          _provider = provider;
       }

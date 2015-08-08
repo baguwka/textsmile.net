@@ -1,8 +1,8 @@
 using System;
 using System.Diagnostics;
 using System.IO;
+using JetBrains.Annotations;
 using Newtonsoft.Json;
-using textsmile.net.Annotations;
 
 namespace textsmile.net.Model {
    [UsedImplicitly]

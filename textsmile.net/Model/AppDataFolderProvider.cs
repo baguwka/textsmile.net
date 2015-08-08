@@ -1,6 +1,6 @@
 ﻿using System;
 using System.IO;
-using textsmile.net.Annotations;
+using JetBrains.Annotations;
 
 namespace textsmile.net.Model {
    [UsedImplicitly]

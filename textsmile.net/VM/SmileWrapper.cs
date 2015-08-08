@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
-using textsmile.net.Annotations;
+using JetBrains.Annotations;
 using textsmile.net.Model;
 
 namespace textsmile.net.VM {
