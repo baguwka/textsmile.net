@@ -41,10 +41,6 @@
     <ApplicationIcon>Resources\icon32x32.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="BegawkEditorUtilities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\dlls\BegawkEditorUtilities.dll</HintPath>
-    </Reference>
     <Reference Include="GlobalHotKey, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\GlobalHotKey.1.1.0\lib\GlobalHotKey.dll</HintPath>
       <Private>True</Private>
@@ -89,8 +85,15 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Model\ActionCommand.cs" />
+    <Compile Include="Model\AppDataFolderProvider.cs" />
     <Compile Include="Model\Extensions.cs" />
+    <Compile Include="Model\IDataProvider.cs" />
+    <Compile Include="Model\ISerializer.cs" />
+    <Compile Include="Model\JsonIOSerializer.cs" />
     <Compile Include="Model\SaveData.cs" />
+    <Compile Include="Model\IOManager.cs" />
+    <Compile Include="Model\SmartCollection.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="UI\WindowContextMenu.cs">
       <SubType>Component</SubType>
@@ -138,7 +141,9 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\icon16x16.ico" />

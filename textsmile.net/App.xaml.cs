@@ -3,6 +3,7 @@ using System.Linq;
 using System.Windows;
 using GlobalHotKey;
 using Microsoft.Practices.Unity;
+using textsmile.net.Model;
 
 namespace textsmile.net {
    /// <summary>
@@ -21,7 +22,12 @@ namespace textsmile.net {
          //ConsoleManager.Show();
          isAppAlreadyRunning();
          _container = new UnityContainer();
+
          _container.RegisterType<HotKeyManager>(new ContainerControlledLifetimeManager());
+
+         _container.RegisterType<ISerializer, JsonIOSerializer>();
+         _container.RegisterType<IDataProvider, AppDataFolderProvider>();
+         _container.RegisterType<IoManager>(new ContainerControlledLifetimeManager());
       }
 
       //todo: use mutex

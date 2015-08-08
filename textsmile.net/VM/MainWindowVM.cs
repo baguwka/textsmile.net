@@ -4,14 +4,16 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Text;
 using System.Windows;
+using System.Windows.Forms;
 using System.Windows.Input;
-using BegawkEditorUtilities;
 using GlobalHotKey;
-using ItemDesigner.Commands;
 using Microsoft.Practices.Unity;
 using textsmile.net.Annotations;
 using textsmile.net.Model;
+using Clipboard = System.Windows.Clipboard;
+using MessageBox = System.Windows.MessageBox;
 
 namespace textsmile.net.VM {
    public sealed class MainWindowVM : IVM, INotifyPropertyChanged {
@@ -44,9 +46,46 @@ namespace textsmile.net.VM {
             Items.Add(InstantiateWrapper());
          });
 
+         HelpCommand = new ActionCommand(showHelp);
+
          _hotkeyManager = App.Container.Resolve<HotKeyManager>();
          _hotkeyManager.KeyPressed += hotkeyManagerOnKeyPressed;
          _hotkey = new HotKey();
+      }
+
+      private void showHelp() {
+         var sb = new StringBuilder();
+         sb.Append(
+            $"To toggle visibility of window press hotkey combination ({ConstructHotkeyText(_hotkey.With(h => h.Key), _hotkey.With(h => h.Modifiers))})")
+            .AppendLine()
+            .AppendLine()
+            .Append("To edit item hold Ctrl modifier on your keyboard and click to that item")
+            .AppendLine()
+            .AppendLine()
+            .Append("To remove item immediatly hold Shift modifier and click red button next to item")
+            .AppendLine();
+
+         MessageBox.Show(sb.ToString(), "Help", MessageBoxButton.OK, MessageBoxImage.Information);
+      }
+
+      public string ConstructHotkeyText(Key key, ModifierKeys mods) {
+         var sb = new StringBuilder(32);
+         if ((mods & ModifierKeys.Control) != 0) {
+            sb.Append("Ctrl+");
+         }
+         if ((mods & ModifierKeys.Shift) != 0) {
+            sb.Append("Shift+");
+         }
+         if ((mods & ModifierKeys.Alt) != 0) {
+            sb.Append("Alt+");
+         }
+         if ((mods & ModifierKeys.Windows) != 0) {
+            sb.Append("Win+");
+         }
+
+         sb.Append(key.ToString());
+
+         return sb.ToString();
       }
 
       private void hotkeyManagerOnKeyPressed(object sender, KeyPressedEventArgs e) {
@@ -75,11 +114,14 @@ namespace textsmile.net.VM {
 
             wrapper => {
                if (Keyboard.Modifiers.HasFlag(ModifierKeys.Control)) {
-
                }
                else {
                   if (!string.IsNullOrEmpty(wrapper.Content)) {
                      Visibility = Visibility.Hidden;
+                     if (!string.IsNullOrEmpty(wrapper.Content)) {
+                        Clipboard.SetText(wrapper.Content);
+                        //SendKeys.SendWait(wrapper.Content);
+                     }
                   }
                }
             });
@@ -97,16 +139,16 @@ namespace textsmile.net.VM {
       }
 
       public ICommand AddCommand { get; set; }
+      public ICommand HelpCommand { get; set; }
 
       public void OnLoad() {
          Debug.WriteLine("--->> OnLoad fired ");
 
-         Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-
          //todo: check data.Key for .None and set default or something
          SetHotkey(Key.N, ModifierKeys.Windows);
          MainVMSaveData data;
-         if (SaveLoadManager.TryLoadRaw("textsmile.net main", out data)) {
+         
+         if (App.Container.Resolve<IoManager>().TryLoad("textsmile.net main", out data)) {
             if (data.smiles != null) {
                LoadSmiles(data.smiles.Select(InstantiateWrapper));
             }
@@ -119,7 +161,7 @@ namespace textsmile.net.VM {
             _hotkeyManager.Unregister(_hotkey);
          }
 
-         SaveLoadManager.SaveRaw("textsmile.net main", new MainVMSaveData(Items) {
+         App.Container.Resolve<IoManager>().Save("textsmile.net main", new MainVMSaveData(Items) {
             Key = _hotkey.With(i => i.Key, Key.N),
             ModsKeys = _hotkey.With(h => h.Modifiers, ModifierKeys.Windows)
          });

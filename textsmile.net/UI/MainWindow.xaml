@@ -9,11 +9,9 @@
         Title="textsmile.net" 
         ShowInTaskbar="False"
         WindowStartupLocation="CenterScreen"
-        Height="350" Width="275" ResizeMode="NoResize"
-        WindowStyle="None"
-        AllowsTransparency="True"
-        Background="Transparent"
-        BorderThickness="0"
+        Height="375" Width="275" ResizeMode="CanResize"
+        MaxHeight="800" MaxWidth="275"
+        WindowStyle="ThreeDBorderWindow"
         Icon="/Resources/icon32x32.ico"
         Visibility="{Binding Visibility, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">
 
@@ -39,12 +37,13 @@
         <StackPanel Grid.Row="1" Margin="1" Orientation="Vertical">
             <DockPanel>
                 <TextBlock DockPanel.Dock="Left" Text="Hotkey" Width="70" TextAlignment="Center"/>
-                <TextBox DockPanel.Dock="Right" Height="20" CaretBrush="White" Name="HotkeyTextBox" PreviewKeyDown="Hotkey_PreviewKeydDown"/>
+                <Button DockPanel.Dock="Right" Content="Help" Height="20" Width="50" Command="{Binding HelpCommand}"/>
+                <TextBox DockPanel.Dock="Right" Height="20" Width="120" CaretBrush="White" Name="HotkeyTextBox" PreviewKeyDown="Hotkey_PreviewKeydDown"/>
             </DockPanel>
             <Button Content="Add" Command="{Binding AddCommand}" Height="18" Width="100" Margin="2"/>
         </StackPanel>
 
-        <ScrollViewer Grid.Row="0" HorizontalScrollBarVisibility="Auto">
+        <ScrollViewer Grid.Row="0" VerticalScrollBarVisibility="Auto">
             <ItemsControl BorderThickness="0" Background="Transparent"
                       ItemsSource="{Binding Items, UpdateSourceTrigger=PropertyChanged}">
 

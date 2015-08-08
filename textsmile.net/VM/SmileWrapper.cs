@@ -1,10 +1,9 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using System.Windows;
 using System.Windows.Input;
-using ItemDesigner.Commands;
 using textsmile.net.Annotations;
+using textsmile.net.Model;
 
 namespace textsmile.net.VM {
    public class SmileWrapper : INotifyPropertyChanged {
@@ -17,9 +16,6 @@ namespace textsmile.net.VM {
          });
 
          ClickCommand = new ActionCommand(() => {
-            if (!string.IsNullOrEmpty(Content)) {
-               Clipboard.SetText(Content);
-            }
             _raiseClick?.Invoke(this);
          });
       }
@@ -44,9 +40,7 @@ namespace textsmile.net.VM {
       [NotifyPropertyChangedInvocator]
       protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null) {
          var handler = PropertyChanged;
-         if (handler != null) {
-            handler(this, new PropertyChangedEventArgs(propertyName));
-         }
+         handler?.Invoke(this, new PropertyChangedEventArgs(propertyName));
       }
    }
 }
