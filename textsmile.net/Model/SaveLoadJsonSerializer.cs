@@ -2,9 +2,11 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using Newtonsoft.Json;
+using textsmile.net.Annotations;
 
 namespace textsmile.net.Model {
-   public class JsonIOSerializer : ISerializer {
+   [UsedImplicitly]
+   public class SaveLoadJsonSerializer : ISerializer {
       public string Serialize<T>(T data) where T : class{
          string serialized;
          try {
@@ -13,11 +15,11 @@ namespace textsmile.net.Model {
          }
          catch (JsonSerializationException ex) {
             Debug.WriteLine(ex);
-            return string.Empty;
+            throw new DataCorruptedException(ex.Message, ex);
          }
          catch (JsonWriterException ex) {
             Debug.WriteLine(ex);
-            return string.Empty;
+            throw new DataCorruptedException(ex.Message, ex);
          }
 
          return serialized;
@@ -32,24 +34,24 @@ namespace textsmile.net.Model {
                data = (T)serializer.Deserialize(reader, typeof (T));
             }
             catch (JsonReaderException ex) {
-               data = null;
                Debug.WriteLine(ex);
+               throw new DataCorruptedException(ex.Message, ex);
             }
             catch (JsonSerializationException ex) {
-               data = null;
                Debug.WriteLine(ex);
+               throw new DataCorruptedException(ex.Message, ex);
             }
             catch (JsonWriterException ex) {
-               data = null;
                Debug.WriteLine(ex);
+               throw new DataCorruptedException(ex.Message, ex);
             }
             catch (InvalidCastException ex) {
-               data = null;
                Debug.WriteLine(ex);
+               throw new DataCorruptedException(ex.Message, ex);
             }
             catch (TypeLoadException ex) {
-               data = null;
                Debug.WriteLine(ex);
+               throw new DataCorruptedException(ex.Message, ex);
             }
             finally {
                reader.Close();

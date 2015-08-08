@@ -1,11 +1,13 @@
 ﻿using System;
 using System.IO;
+using textsmile.net.Annotations;
 
 namespace textsmile.net.Model {
+   [UsedImplicitly]
    public class AppDataFolderProvider : IDataProvider {
-      protected string _dataPath;
+      private string _dataPath;
 
-      protected string DataPath {
+      private string DataPath {
          get {
             if (string.IsNullOrEmpty(_dataPath)) {
                _dataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\Baguwk\\textsmile.net\\";
@@ -21,7 +23,7 @@ namespace textsmile.net.Model {
          return $"{DataPath}/{fileMask(key)}.json";
       }
 
-      protected static string fileMask(string filename) {
+      private static string fileMask(string filename) {
          return $"{filename}.bgw";
       }
 

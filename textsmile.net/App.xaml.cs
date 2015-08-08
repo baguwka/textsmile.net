@@ -25,9 +25,9 @@ namespace textsmile.net {
 
          _container.RegisterType<HotKeyManager>(new ContainerControlledLifetimeManager());
 
-         _container.RegisterType<ISerializer, JsonIOSerializer>();
+         _container.RegisterType<ISerializer, SaveLoadJsonSerializer>();
          _container.RegisterType<IDataProvider, AppDataFolderProvider>();
-         _container.RegisterType<IoManager>(new ContainerControlledLifetimeManager());
+         _container.RegisterType<SaveLoadController>(new ContainerControlledLifetimeManager());
       }
 
       //todo: use mutex

@@ -6,7 +6,6 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Windows;
-using System.Windows.Forms;
 using System.Windows.Input;
 using GlobalHotKey;
 using Microsoft.Practices.Unity;
@@ -21,24 +20,27 @@ namespace textsmile.net.VM {
 
       private HotKey _hotkey;
       private readonly HotKeyManager _hotkeyManager;
-      private Visibility _visibility;
+      private WindowState _windowState;
+      private SaveLoadController _saveLoadController;
 
       public event EventHandler<KeyPressedEventArgs> HotkeyPressed;
 
-      public Visibility Visibility
+      public WindowState WindowState
       {
-         get { return _visibility; }
+         get { return _windowState; }
          set
          {
-            if (value == _visibility) {
+            if (value == _windowState) {
                return;
             }
-            _visibility = value;
+            _windowState = value;
             OnPropertyChanged();
          }
       }
 
       public MainWindowVM() {
+         _saveLoadController = App.Container.Resolve<SaveLoadController>();
+
          Items = new SmartCollection<SmileWrapper>();
          Items.CollectionChanged += (sender, args) => OnPropertyChanged(nameof(Items));
 
@@ -117,7 +119,8 @@ namespace textsmile.net.VM {
                }
                else {
                   if (!string.IsNullOrEmpty(wrapper.Content)) {
-                     Visibility = Visibility.Hidden;
+                     WindowState = WindowState.Minimized;
+                     //Visibility = Visibility.Hidden;
                      if (!string.IsNullOrEmpty(wrapper.Content)) {
                         Clipboard.SetText(wrapper.Content);
                         //SendKeys.SendWait(wrapper.Content);
@@ -142,13 +145,30 @@ namespace textsmile.net.VM {
       public ICommand HelpCommand { get; set; }
 
       public void OnLoad() {
-         Debug.WriteLine("--->> OnLoad fired ");
-
-         //todo: check data.Key for .None and set default or something
          SetHotkey(Key.N, ModifierKeys.Windows);
          MainVMSaveData data;
-         
-         if (App.Container.Resolve<IoManager>().TryLoad("textsmile.net main", out data)) {
+
+         if (_saveLoadController.TryLoad("textsmile.net main", out data,
+            exception => {
+               var result = MessageBox.Show("SaveData corrupted and cannot be loaded. " +
+                                            "\nWipe all save data to prevent this error next time? " +
+                                            "(Yes is recomended, but if you can restore it somehow manually, then select No)" +
+                                            $"\n\n\n Details:\n{exception.Message}" +
+                                            $"\n\n StackTrace:\n{exception.StackTrace}",
+                  "Error", MessageBoxButton.YesNo,
+                  MessageBoxImage.Error, MessageBoxResult.Yes);
+
+               switch (result) {
+                  case MessageBoxResult.Yes:
+                     return true;
+                  case MessageBoxResult.No:
+                     return false;
+                  default:
+                     return true;
+               }
+            }
+            
+            )) {
             if (data.smiles != null) {
                LoadSmiles(data.smiles.Select(InstantiateWrapper));
             }
@@ -161,9 +181,26 @@ namespace textsmile.net.VM {
             _hotkeyManager.Unregister(_hotkey);
          }
 
-         App.Container.Resolve<IoManager>().Save("textsmile.net main", new MainVMSaveData(Items) {
+         _saveLoadController.Save("textsmile.net main", new MainVMSaveData(Items) {
             Key = _hotkey.With(i => i.Key, Key.N),
             ModsKeys = _hotkey.With(h => h.Modifiers, ModifierKeys.Windows)
+         }, exception => {
+            var result = MessageBox.Show("SaveData corrupted and cannot be saved. " +
+                                         "\nBlock writing attempt to not to corrupt the save file?? " +
+                                         "(Yes is recomended, but if you can restore it somehow manually, then select No)" +
+                                         $"\n\n\n Details:\n{exception.Message}" +
+                                         $"\n\n StackTrace:\n{exception.StackTrace}",
+               "Error", MessageBoxButton.YesNo,
+               MessageBoxImage.Error, MessageBoxResult.Yes);
+
+            switch (result) {
+               case MessageBoxResult.Yes:
+                  return true;
+               case MessageBoxResult.No:
+                  return false;
+               default:
+                  return true;
+            }
          });
       }
 

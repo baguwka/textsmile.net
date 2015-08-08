@@ -3,7 +3,6 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:vm="clr-namespace:textsmile.net.VM"
         
-        Deactivated="OnWindowDeactivated"
         Loaded="onLoaded"
         
         Title="textsmile.net" 
@@ -13,7 +12,7 @@
         MaxHeight="800" MaxWidth="275"
         WindowStyle="ThreeDBorderWindow"
         Icon="/Resources/icon32x32.ico"
-        Visibility="{Binding Visibility, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">
+        WindowState="{Binding WindowState, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">
 
     <Window.DataContext>
         <vm:MainWindowVM/>

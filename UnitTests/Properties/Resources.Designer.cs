@@ -63,6 +63,16 @@ namespace UnitTests.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
+        internal static byte[] corrupted_test {
+            get {
+                object obj = ResourceManager.GetObject("corrupted_test", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
         internal static byte[] test {
             get {
                 object obj = ResourceManager.GetObject("test", resourceCulture);

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Text;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Input;
@@ -25,10 +24,21 @@ namespace textsmile.net.UI {
       }
 
       private void hotkeyManagerOnKeyPressed(object sender, KeyPressedEventArgs e) {
-         toggleVisibility();
 
-         Left = System.Windows.Forms.Cursor.Position.X + 20;
-         Top = (System.Windows.Forms.Cursor.Position.Y - Height) + 20;
+         var context = new MainContextMenu(GetMainWindowVM.Items, (o, args) => {
+            WindowState = WindowState.Normal;
+         });
+
+         context.Visibility = Visibility.Visible;
+         //context.Show(control, 
+         //   new System.Drawing.Point(
+         //      System.Windows.Forms.Cursor.Position.X + 20,
+         //      (int)((System.Windows.Forms.Cursor.Position.Y - Height)) + 20));
+
+         toggleWindowState();
+
+         //Left = System.Windows.Forms.Cursor.Position.X + 20;
+         //Top = (System.Windows.Forms.Cursor.Position.Y - Height) + 20;
       }
 
       /// <summary>
@@ -48,23 +58,24 @@ namespace textsmile.net.UI {
       }
 
       private void OnNotifyDoubleClick(object sender, EventArgs e) {
-         toggleVisibility();
+         toggleWindowState();
       }
 
-      private void toggleVisibility() {
-         Visibility = Visibility == Visibility.Visible ? Visibility.Hidden : Visibility.Visible;
-         if (Visibility == Visibility.Visible) {
+      private void toggleWindowState() {
+         WindowState = WindowState == WindowState.Normal ? WindowState.Minimized : WindowState.Normal;
+         if (WindowState == WindowState.Normal) {
             Activate();
             Focus();
          }
       }
 
       private void onLoaded(object sender, RoutedEventArgs e) {
+         this.HideMinimizeAndMaximizeButtons();
+
          Debug.WriteLine("MainWindow.cs loaded");
          GetViewModel.OnLoad();
          CreateNotifyIcon();
          GetMainWindowVM.HotkeyPressed += hotkeyManagerOnKeyPressed;
-         Visibility = Visibility.Hidden;
 
          HotkeyTextBox.Text = GetMainWindowVM.ConstructHotkeyText(GetMainWindowVM.GetHotkey().Key, GetMainWindowVM.GetHotkey().Modifiers);
       }
@@ -82,6 +93,7 @@ namespace textsmile.net.UI {
          notify = null;
          base.OnClosed(e);
       }
+
 
       private void Hotkey_PreviewKeydDown(object sender, KeyEventArgs e) {
          // The text box grabs all input.
@@ -115,10 +127,6 @@ namespace textsmile.net.UI {
 
          HotkeyTextBox.Text = GetMainWindowVM.ConstructHotkeyText(key, mods);
          GetMainWindowVM.SetHotkey(key, mods);
-      }
-
-      private void OnWindowDeactivated(object sender, EventArgs e) {
-         Hide();
       }
    }
 }

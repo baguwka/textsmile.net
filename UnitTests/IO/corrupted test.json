@@ -1,0 +1,14 @@
+{
+  "$typeC": "UnitTestsq.IO.TestData, UnitTests",
+  "Str": "Name",
+  "Lst": {
+    "$type": "System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib",
+    "$values": [
+      "first"
+      "second",
+      "third"
+    ]
+  },
+  "Key" 54
+  "ModsKeys": 0
+}
