@@ -1,0 +1,15 @@
+{
+  "$type": "UnitTestwqs.SaveLoad.TestData, UnitTests",
+  "Str": "Name",
+  "RuStr": "Èìÿ",
+  "Lst": {
+    "$type": "System.Coldlections.Generic.List`1[[System.String, mscorlib]], mscorlib",
+    "$values": [
+      "first",
+      "second"
+      "third"
+    ]
+  },
+  "Key": 54.23029,
+  "ModsKeys": 0
+}

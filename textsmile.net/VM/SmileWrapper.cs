@@ -38,7 +38,7 @@ namespace textsmile.net.VM {
       public ICommand ClickCommand { get; set; }
 
       [NotifyPropertyChangedInvocator]
-      protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null) {
+      protected void OnPropertyChanged([CallerMemberName] string propertyName = null) {
          var handler = PropertyChanged;
          handler?.Invoke(this, new PropertyChangedEventArgs(propertyName));
       }

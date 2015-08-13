@@ -67,13 +67,13 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
-    <Compile Include="IO\SaveLoadControllerTests.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="SaveLoad\SaveLoadControllerTests.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\textsmile.net\textsmile.net.csproj">
@@ -82,13 +82,14 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="IO\corrupted test.json" />
-    <None Include="IO\test.json" />
+    <None Include="SaveLoad\corrupted test.json" />
+    <None Include="SaveLoad\test.json" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
+      <SubType>Designer</SubType>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>

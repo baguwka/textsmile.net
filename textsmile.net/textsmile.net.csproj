@@ -100,7 +100,6 @@
     <Compile Include="Model\SaveLoadController.cs" />
     <Compile Include="Model\SmartCollection.cs" />
     <Compile Include="Model\WindowExtensions.cs" />
-    <Compile Include="Properties\Annotations.cs" />
     <Compile Include="UI\WindowContextMenu.cs">
       <SubType>Component</SubType>
     </Compile>
