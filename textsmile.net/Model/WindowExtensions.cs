@@ -21,5 +21,12 @@ namespace textsmile.net.Model {
 
          SetWindowLong(hwnd, GWL_STYLE, (currentStyle & ~WS_MAXIMIZEBOX & ~WS_MINIMIZEBOX));
       }
+
+      internal static void HideMaximizeButton(this Window window) {
+         IntPtr hwnd = new System.Windows.Interop.WindowInteropHelper(window).Handle;
+         var currentStyle = GetWindowLong(hwnd, GWL_STYLE);
+
+         SetWindowLong(hwnd, GWL_STYLE, (currentStyle & ~WS_MAXIMIZEBOX));
+      }
    }
 }

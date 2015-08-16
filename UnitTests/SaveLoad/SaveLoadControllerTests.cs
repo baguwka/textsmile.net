@@ -79,12 +79,12 @@ namespace UnitTests.SaveLoad {
          var data = createTestData();
          controller.Save("test", data);
 
-         Assert.That(reference, Is.EqualTo(result), "Sample and result of Json serialization differs, but must be same.");
+         Assert.That(result, Is.EqualTo(reference), "Sample and result of Json serialization differs, but must be same.");
       }
 
       [Test]
       public void Create_instance_of_corrupted_data_and_check_that_CorruptedHandler_fired_and_dataProviders_write_call_blocked() {
-         string serialized = Encoding.Default.GetString(Resources.corrupted_test);
+         string reference = Encoding.Default.GetString(Resources.corrupted_test);
          string result = string.Empty;
          bool corruptHandlerFired = false;
          bool dataProviderWriteCalled = false;
@@ -93,7 +93,7 @@ namespace UnitTests.SaveLoad {
          configureContainer(uc);
 
          var dataProvider = Substitute.For<IDataProvider>();
-         dataProvider.WhenForAnyArgs(x => x.Write("test", serialized)).Do(info => {
+         dataProvider.WhenForAnyArgs(x => x.Write("test", reference)).Do(info => {
             result = info.ArgAt<string>(1);
             dataProviderWriteCalled = true;
          });
@@ -145,7 +145,7 @@ namespace UnitTests.SaveLoad {
 
       [Test]
       public void Load_corrupted_reference_and_check_that_CorruptedHandler_fired_and_data_rewriten() {
-         string serialized = Encoding.Default.GetString(Resources.corrupted_test);
+         string reference = Encoding.Default.GetString(Resources.corrupted_test);
          bool corruptHandlerFired = false;
          bool dataProviderWriteCalled = false;
 
@@ -153,8 +153,8 @@ namespace UnitTests.SaveLoad {
          configureContainer(uc);
 
          var dataProvider = Substitute.For<IDataProvider>();
-         dataProvider.Read("test").ReturnsForAnyArgs(serialized);
-         dataProvider.WhenForAnyArgs(x => x.Write("test", serialized)).Do(info => {
+         dataProvider.Read("test").ReturnsForAnyArgs(reference);
+         dataProvider.WhenForAnyArgs(x => x.Write("test", reference)).Do(info => {
             dataProviderWriteCalled = true;
          });
 

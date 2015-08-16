@@ -82,6 +82,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="SaveLoad\corrupted test.json" />
     <None Include="SaveLoad\test.json" />
     <None Include="packages.config" />
