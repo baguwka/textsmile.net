@@ -5,6 +5,8 @@ Text smiles for windows.
 * Press hotkey to display context-menu with yours smiles.
 * Click on any, it will be placed into your clipboard.
 
+#####[Check releases!](https://github.com/baguwka/textsmile.net/releases)
+
 ### Demonstration:
 
 ![alt tag](https://i.imgur.com/xBrAHlA.gif)
