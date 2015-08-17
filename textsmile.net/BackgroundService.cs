@@ -30,7 +30,6 @@ namespace textsmile.net {
          _hotkeyManager = hotkeyManager;
          _smiles = smiles;
          _configView = new ConfigurationView();
-         _hotkeyManager.KeyPressed += onHotkeyManagerKeyPressed;
 
       }
 
@@ -43,22 +42,25 @@ namespace textsmile.net {
 
          _configView.Show();
          _configView.WindowState = WindowState.Normal;
+         _configView.Activate();
 
+         _hotkeyManager.KeyPressed += onHotkeyManagerKeyPressed;
          _smiles.SmileClicked += onSmileClickRaised;
          _smiles.SmileRemoved += onSmileRemoveRaised;
       }
 
       private void onTrayClick(object sender, EventArgs eventArgs) {
          _configView.Show();
-         _configView.Focus();
          _configView.WindowState = WindowState.Normal;
+         _configView.Focus();
+         _configView.Activate();
       }
 
       public void Close() {
          unload();
          _tray.Close();
-         _hotkeyManager.KeyPressed -= onHotkeyManagerKeyPressed;
 
+         _hotkeyManager.KeyPressed -= onHotkeyManagerKeyPressed;
          _smiles.SmileClicked -= onSmileClickRaised;
          _smiles.SmileRemoved -= onSmileRemoveRaised;
       }
@@ -89,7 +91,7 @@ namespace textsmile.net {
                LoadSmiles(data.Smiles.Select(_smiles.InstantiateSmile));
             }
             Debug.WriteLine("load" + DateTime.Now);
-            SetHotkey(data.Key, data.ModsKeys);
+            setHotkey(data.Key, data.ModsKeys);
          }
       }
 
@@ -122,7 +124,7 @@ namespace textsmile.net {
          _hotkeyManager.Unregister("toggle");
       }
 
-      public void SetHotkey(Key key, ModifierKeys mods) {
+      private void setHotkey(Key key, ModifierKeys mods) {
          _hotkeyManager.Unregister("toggle");
          var hotKey = new HotKey(key, mods);
          _hotkeyManager.Register("toggle", hotKey);

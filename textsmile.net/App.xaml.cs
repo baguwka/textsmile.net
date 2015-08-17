@@ -1,6 +1,5 @@
 ﻿#define ISDEBUG
 
-using System;
 using System.Diagnostics;
 using System.Linq;
 using System.Windows;
@@ -9,8 +8,6 @@ using Microsoft.Practices.Unity;
 using textsmile.net.GlobalHotkey;
 using textsmile.net.Model;
 using textsmile.net.Model.Smile;
-using textsmile.net.UI;
-using textsmile.net.VM;
 
 namespace textsmile.net {
    /// <summary>
@@ -67,12 +64,14 @@ namespace textsmile.net {
       }
 
       //todo: use mutex
+      //todo: WindowState.Normal on existing app instance, no MessageBox
       private bool isAppAlreadyRunning() {
-         Process currentProcess = Process.GetCurrentProcess();
+         var currentProcess = Process.GetCurrentProcess();
 
          var processes = Process.GetProcessesByName(currentProcess.ProcessName);
 
          if (processes.Any(p => p.Id != currentProcess.Id)) {
+
             MessageBox.Show("Another instance is already running.", "Application already running",
             MessageBoxButton.OK, MessageBoxImage.Exclamation);
 
