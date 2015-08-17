@@ -1,6 +1,4 @@
-﻿#define ISDEBUG
-
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Linq;
 using System.Windows;
 using System.Windows.Threading;
@@ -52,7 +50,7 @@ namespace textsmile.net {
       private void CurrentOnDispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e) {
          MessageBox.Show(e.Exception.Message + "\n\n" + e.Exception.StackTrace, "Exception", MessageBoxButton.OK, MessageBoxImage.Error);
 
-#if !ISDEBUG
+#if !DEBUG
          e.Handled = true;
 #endif
 
