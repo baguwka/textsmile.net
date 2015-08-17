@@ -60,10 +60,13 @@ namespace textsmile.net.Model {
          T data = null;
 
          var readResult = _provider.Read(key);
-         var serializedData = readResult;
+
+         if (string.IsNullOrEmpty(readResult)) {
+            return null;
+         }
 
          try {
-            data = _io.Deserialize<T>(serializedData);
+            data = _io.Deserialize<T>(readResult);
          }
          catch (DataCorruptedException ex) {
             var result = dataCorruptedHandler(ex);
