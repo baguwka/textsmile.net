@@ -67,12 +67,13 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
+    <Compile Include="Hotkey\HotKeyManagerTesting.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="IO\IOManagerTests.cs" />
+    <Compile Include="SaveLoad\SaveLoadControllerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -82,12 +83,15 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="IO\test.json" />
+    <None Include="app.config" />
+    <None Include="SaveLoad\corrupted test.json" />
+    <None Include="SaveLoad\test.json" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
+      <SubType>Designer</SubType>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
