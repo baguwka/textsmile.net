@@ -8,19 +8,19 @@ namespace textsmile.net.Model.Smile {
       private string _content;
 
       public SmileItem() {
-         RemoveCommand = new DelegateCommand(RemoveExecute);
-         ClickCommand = new DelegateCommand(ClickExecute);
+         RemoveCommand = new DelegateCommand(removeExecute);
+         ClickCommand = new DelegateCommand(clickExecute);
       }
 
       public SmileItem(string content) : this() {
          _content = content;
       }
 
-      private void RemoveExecute() {
+      private void removeExecute() {
          RemoveHandler?.Invoke(this);
       }
 
-      private void ClickExecute() {
+      private void clickExecute() {
          ClickHandler?.Invoke(this);
       }
 

@@ -13,7 +13,6 @@ using textsmile.net.Model.Smile;
 namespace textsmile.net.VM {
    public sealed class ConfigurationViewModel : BindableBase, IVM {
       private readonly HotKeyManager _hotkeyManager;
-      private readonly SmileCollection _smileCollection;
       private string _hotkeyText;
 
       public string HotkeyText {
@@ -26,27 +25,21 @@ namespace textsmile.net.VM {
          HelpCommand = new DelegateCommand(showHelpCommandExecute);
 
          _hotkeyManager = App.Container.Resolve<HotKeyManager>();
-
-         _smileCollection = App.Container.Resolve<SmileCollection>();
+         SmileCollection = App.Container.Resolve<SmileCollection>();
       }
 
       private void addCommandExecute() {
-         _smileCollection.AddSmile();
+         SmileCollection.AddSmile();
       }
 
       private void showHelpCommandExecute() {
          var hotKey = _hotkeyManager.GetHotkey("toggle");
 
          var sb = new StringBuilder();
-         sb.Append(
-            $"To toggle visibility of window press hotkey combination ({HotKey.ConstructHotkeyText(hotKey.With(h => h.Key), hotKey.With(h => h.Modifiers))})")
+         sb.AppendLine(
+            $"To toggle visibility of context menu with smiles press hotkey combination ({HotKey.ConstructHotkeyText(hotKey)})")
             .AppendLine()
-            .AppendLine()
-            .Append("To edit item hold Ctrl modifier on your keyboard and click to that item")
-            .AppendLine()
-            .AppendLine()
-            .Append("To remove item immediatly hold Shift modifier and click red button next to item")
-            .AppendLine();
+            .AppendLine("To remove item immediatly hold Shift modifier and click red button next to item");
 
          MessageBox.Show(sb.ToString(), "Help", MessageBoxButton.OK, MessageBoxImage.Information);
       }
@@ -54,9 +47,7 @@ namespace textsmile.net.VM {
       public ICommand AddCommand { get; set; }
       public ICommand HelpCommand { get; set; }
 
-      public SmileCollection SmileCollection {
-         get { return _smileCollection; }
-      }
+      public SmileCollection SmileCollection { get; }
 
       public void OnLoad() {
          _hotkeyManager.KeyRegistered += onHotkeyRegistered;
