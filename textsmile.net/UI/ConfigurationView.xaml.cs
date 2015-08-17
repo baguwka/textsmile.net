@@ -28,7 +28,7 @@ namespace textsmile.net.UI {
       }
 
       private void onLoaded(object sender, RoutedEventArgs e) {
-         this.HideMinimizeAndMaximizeButtons();
+         this.HideMaximizeButton();
 
          GetViewModel.OnLoad();
          //CreateNotifyIcon();
@@ -83,6 +83,15 @@ namespace textsmile.net.UI {
          }
 
          GetConfigurationViewModel.SetHotkey(key, mods);
+      }
+
+      private void onWindowStateChanged(object sender, EventArgs e) {
+         if (WindowState == WindowState.Minimized) {
+            Visibility = Visibility.Hidden;
+         }
+         if (WindowState == WindowState.Normal) {
+            Visibility = Visibility.Visible;
+         }
       }
    }
 }

@@ -4,6 +4,7 @@
         xmlns:vm="clr-namespace:textsmile.net.VM"
         
         Loaded="onLoaded"
+        StateChanged="onWindowStateChanged"
         
         Title="textsmile.net" 
         ShowInTaskbar="True"

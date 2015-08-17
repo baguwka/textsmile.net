@@ -5,6 +5,7 @@ using System.Linq;
 using System.Monads;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using JetBrains.Annotations;
 using Microsoft.Practices.Unity;
@@ -41,15 +42,16 @@ namespace textsmile.net {
          _tray.Tray.DoubleClick += onTrayDoubleClick;
 
          _configView.Show();
+         _configView.WindowState = WindowState.Normal;
 
          _smiles.SmileClicked += onSmileClickRaised;
          _smiles.SmileRemoved += onSmileRemoveRaised;
       }
 
       private void onTrayClick(object sender, EventArgs eventArgs) {
-         _configView.WindowState = WindowState.Normal;
          _configView.Show();
          _configView.Focus();
+         _configView.WindowState = WindowState.Normal;
       }
 
       public void Close() {
@@ -153,8 +155,10 @@ namespace textsmile.net {
 
       private void onHotkeyManagerKeyPressed(object sender, HotkeyEventArgs e) {
          var context = (ContextMenu)Application.Current.MainWindow.FindResource("SmilesContextMenu");
+         context.IsOpen = false;
          context.PlacementTarget = Application.Current.MainWindow;
          context.IsOpen = true;
+         context.Placement = PlacementMode.MousePoint;
       }
 
       private void onTrayDoubleClick(object sender, EventArgs eventArgs) {
