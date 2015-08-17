@@ -26,7 +26,9 @@ namespace textsmile.net {
       }
 
       private void CompositionRoot(object sender, StartupEventArgs e) {
-         isAppAlreadyRunning();
+         if (isAppAlreadyRunning()) {
+            return;
+         }
 
          Current.Exit += onAppExit;
          Current.DispatcherUnhandledException += CurrentOnDispatcherUnhandledException;
@@ -65,7 +67,7 @@ namespace textsmile.net {
       }
 
       //todo: use mutex
-      private void isAppAlreadyRunning() {
+      private bool isAppAlreadyRunning() {
          Process currentProcess = Process.GetCurrentProcess();
 
          var processes = Process.GetProcessesByName(currentProcess.ProcessName);
@@ -75,8 +77,9 @@ namespace textsmile.net {
             MessageBoxButton.OK, MessageBoxImage.Exclamation);
 
             Current.Shutdown();
-            return;
+            return true;
          }
+         return false;
       }
    }
 }

@@ -6,24 +6,36 @@
         Loaded="onLoaded"
         
         Title="textsmile.net" 
-        ShowInTaskbar="False"
+        ShowInTaskbar="True"
         WindowStartupLocation="CenterScreen"
         Height="375" Width="275" ResizeMode="CanResize"
         MaxHeight="800" MaxWidth="275"
-        WindowStyle="ThreeDBorderWindow"
+        MinHeight="300" MinWidth="275"
+        WindowStyle="SingleBorderWindow"
         Icon="/Resources/icon32x32.ico"
-        WindowState="{Binding WindowState, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">
+        WindowState="Normal">
 
     <Window.DataContext>
         <vm:ConfigurationViewModel/>
     </Window.DataContext>
+    
+    <Window.Resources>
+        <Style x:Key="SmileItemStyle" TargetType="{x:Type MenuItem}" BasedOn="{StaticResource {x:Type MenuItem}}">
+            <Setter Property="MenuItem.Header" Value="{Binding Content, UpdateSourceTrigger=PropertyChanged}" />
+            <Setter Property="MenuItem.Command" Value="{Binding ClickCommand}" />
+        </Style>
+
+        <ContextMenu x:Key="SmilesContextMenu" ItemsSource="{Binding SmileCollection.Items}" 
+                     ItemContainerStyle="{StaticResource SmileItemStyle}"
+                     DataContext="{Binding DataContext, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"/>
+    </Window.Resources>
 
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition/>
             <RowDefinition Height="45"/>
         </Grid.RowDefinitions>
-
+        
         <!--<Menu Grid.Row="0" VerticalAlignment="Top">
             <MenuItem Header="File">
                 <MenuItem Header="Save" Command ="{Binding SaveCommand}"/>

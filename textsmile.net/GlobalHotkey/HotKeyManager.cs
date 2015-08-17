@@ -8,7 +8,6 @@ using System.Windows.Interop;
 using JetBrains.Annotations;
 
 namespace textsmile.net.GlobalHotkey {
-
    /// <summary>
    /// Setups system-wide hot keys and provides possibility to react on their events.
    /// </summary>
@@ -54,8 +53,9 @@ namespace textsmile.net.GlobalHotkey {
 
          // Register new hot key.
          var id = getFreeKeyId();
-         if (!_api.RegisterHotKey(_windowHandleSource.Handle, id, hotKey.Key, hotKey.Modifiers))
+         if (!_api.RegisterHotKey(_windowHandleSource.Handle, id, hotKey.Key, hotKey.Modifiers)) {
             throw new Win32Exception(Marshal.GetLastWin32Error(), "Can't register the hot key.");
+         }
 
          hotKey.ID = id;
          _registered.Add(label, hotKey);
@@ -111,6 +111,8 @@ namespace textsmile.net.GlobalHotkey {
          foreach (var kvp in _registered) {
             WinApi.UnregisterHotKey(_windowHandleSource.Handle, kvp.Value.ID);
          }
+
+         _registered.Clear();
 
          _windowHandleSource.RemoveHook(messagesHandler);
          _windowHandleSource.Dispose();

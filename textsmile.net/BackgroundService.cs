@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Monads;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using JetBrains.Annotations;
 using Microsoft.Practices.Unity;
@@ -11,6 +12,9 @@ using textsmile.net.GlobalHotkey;
 using textsmile.net.Model;
 using textsmile.net.Model.Smile;
 using textsmile.net.UI;
+using Application = System.Windows.Application;
+using Clipboard = System.Windows.Clipboard;
+using MessageBox = System.Windows.MessageBox;
 
 namespace textsmile.net {
    [UsedImplicitly]
@@ -26,8 +30,7 @@ namespace textsmile.net {
          _smiles = smiles;
          _configView = new ConfigurationView();
          _hotkeyManager.KeyPressed += onHotkeyManagerKeyPressed;
-         _hotkeyManager.KeyRegistered += onHotkeyRegistered;
-         _hotkeyManager.KeyUnregistered += onHotkeyUnregistered;
+
       }
 
       public void Run() {
@@ -38,11 +41,14 @@ namespace textsmile.net {
          _tray.Tray.DoubleClick += onTrayDoubleClick;
 
          _configView.Show();
-         //_configView.WindowState = WindowState.Minimized;
+
+         _smiles.SmileClicked += onSmileClickRaised;
+         _smiles.SmileRemoved += onSmileRemoveRaised;
       }
 
       private void onTrayClick(object sender, EventArgs eventArgs) {
          _configView.WindowState = WindowState.Normal;
+         _configView.Show();
          _configView.Focus();
       }
 
@@ -50,8 +56,9 @@ namespace textsmile.net {
          unload();
          _tray.Close();
          _hotkeyManager.KeyPressed -= onHotkeyManagerKeyPressed;
-         _hotkeyManager.KeyRegistered -= onHotkeyRegistered;
-         _hotkeyManager.KeyUnregistered -= onHotkeyUnregistered;
+
+         _smiles.SmileClicked -= onSmileClickRaised;
+         _smiles.SmileRemoved -= onSmileRemoveRaised;
       }
 
       private void load() {
@@ -77,7 +84,7 @@ namespace textsmile.net {
                }
             })) {
             if (data.Smiles != null) {
-               LoadSmiles(data.Smiles.Select(InstantiateSmile));
+               LoadSmiles(data.Smiles.Select(_smiles.InstantiateSmile));
             }
             Debug.WriteLine("load" + DateTime.Now);
             SetHotkey(data.Key, data.ModsKeys);
@@ -119,29 +126,15 @@ namespace textsmile.net {
          _hotkeyManager.Register("toggle", hotKey);
       }
 
-      public SmileItem InstantiateSmile() {
-         return InstantiateSmile(string.Empty);
-      }
-
-      private SmileItem InstantiateSmile(string content) {
-         return new SmileItem(content) {
-            RemoveHandler = onSmileRemoveRaised,
-            ClickHandler = onSmileClickRaised
-         };
-      }
-
-      private void onSmileClickRaised(SmileItem smileItem) {
-         if (Keyboard.Modifiers.HasFlag(ModifierKeys.Control)) { }
-         else {
+      private void onSmileClickRaised(object sender, SmileItem smileItem) {
+         if (!string.IsNullOrEmpty(smileItem.Content)) {
             if (!string.IsNullOrEmpty(smileItem.Content)) {
-               if (!string.IsNullOrEmpty(smileItem.Content)) {
-                  Clipboard.SetText(smileItem.Content);
-               }
+               Clipboard.SetText(smileItem.Content);
             }
          }
       }
 
-      private void onSmileRemoveRaised(SmileItem smileItem) {
+      private void onSmileRemoveRaised(object sender, SmileItem smileItem) {
          if (Keyboard.Modifiers.HasFlag(ModifierKeys.Shift)) {
             _smiles.Items.Remove(smileItem);
          }
@@ -159,19 +152,13 @@ namespace textsmile.net {
       }
 
       private void onHotkeyManagerKeyPressed(object sender, HotkeyEventArgs e) {
-         _configView.ToggleWindowState();
-         _configView.Left = System.Windows.Forms.Cursor.Position.X + 20;
-         _configView.Top = (System.Windows.Forms.Cursor.Position.Y - _configView.Height) + 20;
-      }
-
-      private void onHotkeyRegistered(object sender, HotkeyEventArgs e) {
-      }
-
-      private void onHotkeyUnregistered(object sender, HotkeyEventArgs e) {
+         var context = (ContextMenu)Application.Current.MainWindow.FindResource("SmilesContextMenu");
+         context.PlacementTarget = Application.Current.MainWindow;
+         context.IsOpen = true;
       }
 
       private void onTrayDoubleClick(object sender, EventArgs eventArgs) {
-         _configView.WindowState = WindowState.Minimized;
+         _configView.Hide();
       }
 
       private void onTrayExitClicked(object sender, EventArgs eventArgs) {

@@ -13,17 +13,8 @@ using textsmile.net.Model.Smile;
 namespace textsmile.net.VM {
    public sealed class ConfigurationViewModel : BindableBase, IVM {
       private readonly HotKeyManager _hotkeyManager;
-      private WindowState _windowState;
       private readonly SmileCollection _smileCollection;
       private string _hotkeyText;
-
-      public WindowState WindowState
-      {
-         get { return _windowState; }
-         set {
-            SetProperty(ref _windowState, value);
-         }
-      }
 
       public string HotkeyText {
          get { return _hotkeyText; }
@@ -40,7 +31,7 @@ namespace textsmile.net.VM {
       }
 
       private void addCommandExecute() {
-         _smileCollection.Items.Add(new SmileItem());
+         _smileCollection.AddSmile();
       }
 
       private void showHelpCommandExecute() {

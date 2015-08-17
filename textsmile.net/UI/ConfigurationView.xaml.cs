@@ -2,11 +2,9 @@
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Input;
-using textsmile.net.GlobalHotkey;
 using textsmile.net.Model;
 using textsmile.net.VM;
 using KeyEventArgs = System.Windows.Input.KeyEventArgs;
-using WindowState = System.Windows.WindowState;
 
 namespace textsmile.net.UI {
    /// <summary>
@@ -20,39 +18,17 @@ namespace textsmile.net.UI {
          InitializeComponent();
       }
 
-      //private void hotkeyManagerOnKeyPressed(object sender, KeyPressedEventArgs e) {
-
-      //   var context = new MainContextMenu(GetConfigurationViewModel.Items, (o, args) => {
-      //      WindowState = WindowState.Normal;
-      //   });
-
-      //   context.Visibility = Visibility.Visible;
-      //   //context.Show(control, 
-      //   //   new System.Drawing.Point(
-      //   //      System.Windows.Forms.Cursor.Position.X + 20,
-      //   //      (int)((System.Windows.Forms.Cursor.Position.Y - Height)) + 20));
-
-      //   ToggleWindowState();
-
-      //   //Left = System.Windows.Forms.Cursor.Position.X + 20;
-      //   //Top = (System.Windows.Forms.Cursor.Position.Y - Height) + 20;
-      //}
-
-      private void OnNotifyDoubleClick(object sender, EventArgs e) {
-         ToggleWindowState();
-      }
-
-      public void ToggleWindowState() {
-         WindowState = WindowState == WindowState.Normal ? WindowState.Minimized : WindowState.Normal;
-         if (WindowState == WindowState.Normal) {
+      public void ToggleVisibility() {
+         Visibility = Visibility == Visibility.Visible ? Visibility.Hidden : Visibility.Visible;
+         if (Visibility == Visibility.Visible) {
+            WindowState = WindowState.Normal;
             Activate();
             Focus();
          }
       }
 
-
       private void onLoaded(object sender, RoutedEventArgs e) {
-         this.HideMaximizeButton();
+         this.HideMinimizeAndMaximizeButtons();
 
          GetViewModel.OnLoad();
          //CreateNotifyIcon();

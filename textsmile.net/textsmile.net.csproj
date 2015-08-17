@@ -124,9 +124,6 @@
     <Compile Include="Model\SmartCollection.cs" />
     <Compile Include="Model\Smile\SmileCollection.cs" />
     <Compile Include="Model\WindowExtensions.cs" />
-    <Compile Include="UI\MainView.xaml.cs">
-      <DependentUpon>MainView.xaml</DependentUpon>
-    </Compile>
     <Compile Include="UI\TrayContextMenu.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -146,10 +143,6 @@
       <DependentUpon>ConfigurationView.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="UI\MainView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
