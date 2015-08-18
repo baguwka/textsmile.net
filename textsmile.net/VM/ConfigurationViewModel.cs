@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Monads;
 using System.Text;
 using System.Windows;
@@ -14,6 +13,7 @@ namespace textsmile.net.VM {
    public sealed class ConfigurationViewModel : BindableBase, IVM {
       private readonly HotKeyManager _hotkeyManager;
       private string _hotkeyText;
+      private bool _isRunOnStartup;
 
       public string HotkeyText {
          get { return _hotkeyText; }
@@ -23,6 +23,8 @@ namespace textsmile.net.VM {
       public ConfigurationViewModel() {
          AddCommand = new DelegateCommand(addCommandExecute);
          HelpCommand = new DelegateCommand(showHelpCommandExecute);
+         QuitCommand = new DelegateCommand(quitCommandExecute);
+         RunOnStartupCommand = new DelegateCommand<bool?>(StartupCommandExecute);
 
          _hotkeyManager = App.Container.Resolve<HotKeyManager>();
          SmileCollection = App.Container.Resolve<SmileCollection>();
@@ -43,8 +45,24 @@ namespace textsmile.net.VM {
          MessageBox.Show(sb.ToString(), "Help", MessageBoxButton.OK, MessageBoxImage.Information);
       }
 
+      private void quitCommandExecute() {
+         Application.Current.MainWindow.Close();
+      }
+
+      private void StartupCommandExecute(bool? b) {
+         MessageBox.Show("Run app on Windows startup is not implemented yet.", "Function not implemented", MessageBoxButton.OK, MessageBoxImage.Information);
+         //throw new NotImplementedException();
+      }
+
       public ICommand AddCommand { get; set; }
       public ICommand HelpCommand { get; set; }
+      public ICommand QuitCommand { get; set; }
+      public ICommand RunOnStartupCommand { get; set; }
+
+      public bool IsRunOnStartup {
+         get { return _isRunOnStartup; }
+         private set { SetProperty(ref _isRunOnStartup, value); }
+      }
 
       public SmileCollection SmileCollection { get; }
 
