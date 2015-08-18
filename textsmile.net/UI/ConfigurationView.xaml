@@ -22,8 +22,10 @@
     
     <Window.Resources>
         <Style x:Key="SmileItemStyle" TargetType="{x:Type MenuItem}" BasedOn="{StaticResource {x:Type MenuItem}}">
-            <Setter Property="MenuItem.Header" Value="{Binding Content, UpdateSourceTrigger=PropertyChanged}" />
-            <Setter Property="MenuItem.Command" Value="{Binding ClickCommand}" />
+            <Setter Property="Header" Value="{Binding Content, UpdateSourceTrigger=PropertyChanged}" />
+            <Setter Property="Command" Value="{Binding ClickCommand}" />
+            <Setter Property="FontFamily" Value="Tahoma" />
+            <Setter Property="FontSize" Value="12" />
         </Style>
 
         <ContextMenu x:Key="SmilesContextMenu" ItemsSource="{Binding SmileCollection.Items}" 
