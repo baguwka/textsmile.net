@@ -130,7 +130,6 @@
     <Compile Include="VM\IVM.cs" />
     <Compile Include="VM\ConfigurationViewModel.cs" />
     <Compile Include="Model\Smile\SmileItem.cs" />
-    <Compile Include="Model\Smile\ConfigurableSmile.cs" />
     <Page Include="UI\ConfigurationView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

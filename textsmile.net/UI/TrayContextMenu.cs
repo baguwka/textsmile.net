@@ -12,24 +12,4 @@ namespace textsmile.net.UI {
          MenuItems.Add(quitItem);
       }
    }
-
-   //public class MainContextMenu : System.Windows.Controls.ContextMenu {
-   //   public MainContextMenu(IEnumerable<SmileWrapper> smiles, EventHandler onConfigure) {
-
-   //      var config = new MenuItem("Configure");
-   //      config.Click += onConfigure;
-   //      Items.Add(config);
-
-   //      Items.Add("-");
-         
-   //      foreach (var smile in smiles) {
-   //         var newItem = new MenuItem(smile.Content);
-   //         newItem.Click += (sender, args) => {
-   //            smile.ClickCommand.Execute(smile);
-   //         };
-
-   //         Items.Add(newItem);
-   //      }
-   //   }
-   //}
 }

@@ -90,7 +90,6 @@ namespace textsmile.net {
             if (data.Smiles != null) {
                LoadSmiles(data.Smiles.Select(_smiles.InstantiateSmile));
             }
-            Debug.WriteLine("load" + DateTime.Now);
             setHotkey(data.Key, data.ModsKeys);
          }
       }
@@ -132,9 +131,7 @@ namespace textsmile.net {
 
       private void onSmileClickRaised(object sender, SmileItem smileItem) {
          if (!string.IsNullOrEmpty(smileItem.Content)) {
-            if (!string.IsNullOrEmpty(smileItem.Content)) {
-               Clipboard.SetText(smileItem.Content);
-            }
+            Clipboard.SetText(smileItem.Content);
          }
       }
 

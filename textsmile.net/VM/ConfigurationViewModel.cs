@@ -36,8 +36,7 @@ namespace textsmile.net.VM {
          var hotKey = _hotkeyManager.GetHotkey("toggle");
 
          var sb = new StringBuilder();
-         sb.AppendLine(
-            $"To toggle visibility of context menu with smiles press hotkey combination ({HotKey.ConstructHotkeyText(hotKey)})")
+         sb.AppendLine($"To toggle visibility of context menu with smiles press hotkey combination ({HotKey.ConstructHotkeyText(hotKey)})")
             .AppendLine()
             .AppendLine("To remove item immediatly hold Shift modifier and click red button next to item");
 
@@ -52,8 +51,7 @@ namespace textsmile.net.VM {
       public void OnLoad() {
          _hotkeyManager.KeyRegistered += onHotkeyRegistered;
          _hotkeyManager.KeyUnregistered += onHotkeyUnregistered;
-
-         Debug.WriteLine("show" + DateTime.Now);
+         
          updateHotkeyText();
       }
 
