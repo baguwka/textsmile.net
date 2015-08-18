@@ -33,20 +33,24 @@ namespace textsmile.net {
 
       }
 
-      public void Run() {
+      public void Run(bool startMinimized = false) {
          load();
 
          _tray.Create(@"Textsmile.net", new TrayContextMenu(onTrayExitClicked));
          _tray.Tray.Click += onTrayClick;
          _tray.Tray.DoubleClick += onTrayDoubleClick;
 
-         _configView.Show();
-         _configView.WindowState = WindowState.Normal;
-         _configView.Activate();
-
+         if (startMinimized) {
+            _configView.WindowState = WindowState.Minimized;
+         }
+         else {
+            _configView.WindowState = WindowState.Normal;
+            _configView.Activate();
+         }
          _hotkeyManager.KeyPressed += onHotkeyManagerKeyPressed;
          _smiles.SmileClicked += onSmileClickRaised;
          _smiles.SmileRemoved += onSmileRemoveRaised;
+
       }
 
       private void onTrayClick(object sender, EventArgs eventArgs) {

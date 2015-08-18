@@ -117,10 +117,12 @@
     <Compile Include="Model\IDataProvider.cs" />
     <Compile Include="Model\INotifyIconController.cs" />
     <Compile Include="Model\ISerializer.cs" />
+    <Compile Include="Model\Shortcut\IShortcutCreator.cs" />
     <Compile Include="Model\NotifyIconController.cs" />
     <Compile Include="Model\SaveLoadJsonSerializer.cs" />
     <Compile Include="Model\SaveData.cs" />
     <Compile Include="Model\SaveLoadController.cs" />
+    <Compile Include="Model\Shortcut\WSHShortcutCreator.cs" />
     <Compile Include="Model\SmartCollection.cs" />
     <Compile Include="Model\Smile\SmileCollection.cs" />
     <Compile Include="Model\WindowExtensions.cs" />
@@ -180,6 +182,17 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Resources\Source\textsmile.net icon.psd" />
+  </ItemGroup>
+  <ItemGroup>
+    <COMReference Include="IWshRuntimeLibrary">
+      <Guid>{F935DC20-1CF0-11D0-ADB9-00C04FD58A0B}</Guid>
+      <VersionMajor>1</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>tlbimp</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+    </COMReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

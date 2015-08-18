@@ -43,6 +43,7 @@
         <Menu Grid.Row="0" VerticalAlignment="Top">
             <MenuItem Header="Menu">
                 <MenuItem Header="Run at Windows startup" IsCheckable="True" Command="{Binding RunOnStartupCommand}"
+                          IsChecked="{Binding IsRunOnStartup, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}"
                           CommandParameter="{Binding Path=IsChecked, RelativeSource={RelativeSource Self}}"/>
                 <Separator/>
                 <MenuItem Header="Help" Command="{Binding HelpCommand}"/>

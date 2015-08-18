@@ -7,6 +7,7 @@ using Microsoft.Practices.Prism.Commands;
 using Microsoft.Practices.Prism.Mvvm;
 using Microsoft.Practices.Unity;
 using textsmile.net.GlobalHotkey;
+using textsmile.net.Model.Shortcut;
 using textsmile.net.Model.Smile;
 
 namespace textsmile.net.VM {
@@ -14,6 +15,7 @@ namespace textsmile.net.VM {
       private readonly HotKeyManager _hotkeyManager;
       private string _hotkeyText;
       private bool _isRunOnStartup;
+      private IShortcutCreator _shortcutCreator;
 
       public string HotkeyText {
          get { return _hotkeyText; }
@@ -26,8 +28,10 @@ namespace textsmile.net.VM {
          QuitCommand = new DelegateCommand(quitCommandExecute);
          RunOnStartupCommand = new DelegateCommand<bool?>(StartupCommandExecute);
 
+         //todo: constructor injection?
          _hotkeyManager = App.Container.Resolve<HotKeyManager>();
          SmileCollection = App.Container.Resolve<SmileCollection>();
+         _shortcutCreator = App.Container.Resolve<IShortcutCreator>();
       }
 
       private void addCommandExecute() {
@@ -50,8 +54,7 @@ namespace textsmile.net.VM {
       }
 
       private void StartupCommandExecute(bool? b) {
-         MessageBox.Show("Run app on Windows startup is not implemented yet.", "Function not implemented", MessageBoxButton.OK, MessageBoxImage.Information);
-         //throw new NotImplementedException();
+         _shortcutCreator.SetShortcut(b ?? false, Environment.SpecialFolder.Startup, "-minimized");
       }
 
       public ICommand AddCommand { get; set; }
@@ -71,6 +74,7 @@ namespace textsmile.net.VM {
          _hotkeyManager.KeyUnregistered += onHotkeyUnregistered;
          
          updateHotkeyText();
+         IsRunOnStartup = _shortcutCreator.CheckShortcut(Environment.SpecialFolder.Startup);
       }
 
       public void OnClosing() {
