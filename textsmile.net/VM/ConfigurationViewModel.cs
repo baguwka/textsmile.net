@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Monads;
-using System.Text;
-using System.Windows;
 using System.Windows.Input;
-using Microsoft.Practices.Prism.Commands;
 using Microsoft.Practices.Prism.Mvvm;
 using Microsoft.Practices.Unity;
 using textsmile.net.GlobalHotkey;
@@ -15,7 +12,8 @@ namespace textsmile.net.VM {
       private readonly HotKeyManager _hotkeyManager;
       private string _hotkeyText;
       private bool _isRunOnStartup;
-      private IShortcutCreator _shortcutCreator;
+      private readonly IShortcutCreator _shortcutCreator;
+      private readonly ConfigurationViewModelCommands _commands;
 
       public string HotkeyText {
          get { return _hotkeyText; }
@@ -23,44 +21,12 @@ namespace textsmile.net.VM {
       }
 
       public ConfigurationViewModel() {
-         AddCommand = new DelegateCommand(addCommandExecute);
-         HelpCommand = new DelegateCommand(showHelpCommandExecute);
-         QuitCommand = new DelegateCommand(quitCommandExecute);
-         RunOnStartupCommand = new DelegateCommand<bool?>(StartupCommandExecute);
-
          //todo: constructor injection?
          _hotkeyManager = App.Container.Resolve<HotKeyManager>();
          SmileCollection = App.Container.Resolve<SmileCollection>();
          _shortcutCreator = App.Container.Resolve<IShortcutCreator>();
+         _commands = App.Container.Resolve<ConfigurationViewModelCommands>();
       }
-
-      private void addCommandExecute() {
-         SmileCollection.AddSmile();
-      }
-
-      private void showHelpCommandExecute() {
-         var hotKey = _hotkeyManager.GetHotkey("toggle");
-
-         var sb = new StringBuilder();
-         sb.AppendLine($"To toggle visibility of context menu with smiles press hotkey combination ({HotKey.ConstructHotkeyText(hotKey)})")
-            .AppendLine()
-            .AppendLine("To remove item immediatly hold Shift modifier and click red button next to item");
-
-         MessageBox.Show(sb.ToString(), "Help", MessageBoxButton.OK, MessageBoxImage.Information);
-      }
-
-      private void quitCommandExecute() {
-         Application.Current.MainWindow.Close();
-      }
-
-      private void StartupCommandExecute(bool? b) {
-         _shortcutCreator.SetShortcut(b ?? false, Environment.SpecialFolder.Startup, "-minimized");
-      }
-
-      public ICommand AddCommand { get; set; }
-      public ICommand HelpCommand { get; set; }
-      public ICommand QuitCommand { get; set; }
-      public ICommand RunOnStartupCommand { get; set; }
 
       public bool IsRunOnStartup {
          get { return _isRunOnStartup; }
@@ -68,6 +34,8 @@ namespace textsmile.net.VM {
       }
 
       public SmileCollection SmileCollection { get; }
+
+      public ConfigurationViewModelCommands Commands => _commands;
 
       public void OnLoad() {
          _hotkeyManager.KeyRegistered += onHotkeyRegistered;

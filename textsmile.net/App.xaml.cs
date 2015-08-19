@@ -43,8 +43,7 @@ namespace textsmile.net {
          Container.RegisterType<INotifyIconController, NotifyIconController>(new ContainerControlledLifetimeManager());
          Container.RegisterType<BackgroundService>(new ContainerControlledLifetimeManager());
          Container.RegisterType<SmileCollection>(new ContainerControlledLifetimeManager());
-         Container.RegisterType<IShortcutCreator, WSHShortcutCreator>();
-         //Container.RegisterType<CohesiveUnit>(new ContainerControlledLifetimeManager());
+         Container.RegisterType<IShortcutCreator, WSHShortcutCreator>(new ContainerControlledLifetimeManager());
 
          bool startMinimized = false;
          for (int i = 0; i != e.Args.Length; ++i) {
