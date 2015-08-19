@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Monads;
 using System.Windows;
@@ -30,10 +29,9 @@ namespace textsmile.net {
          _hotkeyManager = hotkeyManager;
          _smiles = smiles;
          _configView = new ConfigurationView();
-
       }
 
-      public void Run() {
+      public void Run(bool startMinimized = false) {
          load();
 
          _tray.Create(@"Textsmile.net", new TrayContextMenu(onTrayExitClicked));
@@ -41,8 +39,13 @@ namespace textsmile.net {
          _tray.Tray.DoubleClick += onTrayDoubleClick;
 
          _configView.Show();
-         _configView.WindowState = WindowState.Normal;
-         _configView.Activate();
+         if (startMinimized) {
+            _configView.WindowState = WindowState.Minimized;
+         }
+         else {
+            _configView.WindowState = WindowState.Normal;
+            _configView.Activate();
+         }
 
          _hotkeyManager.KeyPressed += onHotkeyManagerKeyPressed;
          _smiles.SmileClicked += onSmileClickRaised;
@@ -90,7 +93,6 @@ namespace textsmile.net {
             if (data.Smiles != null) {
                LoadSmiles(data.Smiles.Select(_smiles.InstantiateSmile));
             }
-            Debug.WriteLine("load" + DateTime.Now);
             setHotkey(data.Key, data.ModsKeys);
          }
       }
@@ -132,9 +134,7 @@ namespace textsmile.net {
 
       private void onSmileClickRaised(object sender, SmileItem smileItem) {
          if (!string.IsNullOrEmpty(smileItem.Content)) {
-            if (!string.IsNullOrEmpty(smileItem.Content)) {
-               Clipboard.SetText(smileItem.Content);
-            }
+            Clipboard.SetText(smileItem.Content);
          }
       }
 

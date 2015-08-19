@@ -1,10 +1,12 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Windows;
 using System.Windows.Threading;
 using Microsoft.Practices.Unity;
 using textsmile.net.GlobalHotkey;
 using textsmile.net.Model;
+using textsmile.net.Model.Shortcut;
 using textsmile.net.Model.Smile;
 
 namespace textsmile.net {
@@ -41,10 +43,17 @@ namespace textsmile.net {
          Container.RegisterType<INotifyIconController, NotifyIconController>(new ContainerControlledLifetimeManager());
          Container.RegisterType<BackgroundService>(new ContainerControlledLifetimeManager());
          Container.RegisterType<SmileCollection>(new ContainerControlledLifetimeManager());
+         Container.RegisterType<IShortcutCreator, WSHShortcutCreator>();
          //Container.RegisterType<CohesiveUnit>(new ContainerControlledLifetimeManager());
 
+         bool startMinimized = false;
+         for (int i = 0; i != e.Args.Length; ++i) {
+            if (e.Args[i] == "-minimized") {
+               startMinimized = true;
+            }
+         }
 
-         Container.Resolve<BackgroundService>().Run();
+         Container.Resolve<BackgroundService>().Run(startMinimized);
       }
 
       private void CurrentOnDispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e) {
