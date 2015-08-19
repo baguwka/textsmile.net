@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Monads;
 using System.Windows;
@@ -30,7 +29,6 @@ namespace textsmile.net {
          _hotkeyManager = hotkeyManager;
          _smiles = smiles;
          _configView = new ConfigurationView();
-
       }
 
       public void Run(bool startMinimized = false) {
@@ -40,6 +38,7 @@ namespace textsmile.net {
          _tray.Tray.Click += onTrayClick;
          _tray.Tray.DoubleClick += onTrayDoubleClick;
 
+         _configView.Show();
          if (startMinimized) {
             _configView.WindowState = WindowState.Minimized;
          }
@@ -47,10 +46,10 @@ namespace textsmile.net {
             _configView.WindowState = WindowState.Normal;
             _configView.Activate();
          }
+
          _hotkeyManager.KeyPressed += onHotkeyManagerKeyPressed;
          _smiles.SmileClicked += onSmileClickRaised;
          _smiles.SmileRemoved += onSmileRemoveRaised;
-
       }
 
       private void onTrayClick(object sender, EventArgs eventArgs) {

@@ -48,7 +48,7 @@ namespace textsmile.net {
 
          bool startMinimized = false;
          for (int i = 0; i != e.Args.Length; ++i) {
-            if (e.Args[i] == "/StartMinimized") {
+            if (e.Args[i] == "-minimized") {
                startMinimized = true;
             }
          }
