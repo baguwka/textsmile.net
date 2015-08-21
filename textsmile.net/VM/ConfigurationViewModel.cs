@@ -71,6 +71,10 @@ namespace textsmile.net.VM {
       }
 
       public void SetHotkey(Key key, ModifierKeys mods) {
+         if (key == Key.Escape && mods == ModifierKeys.None) {
+            return;
+         }
+
          _hotkeyManager.Unregister("toggle");
          var hotKey = new HotKey(key, mods);
          _hotkeyManager.Register("toggle", hotKey);
