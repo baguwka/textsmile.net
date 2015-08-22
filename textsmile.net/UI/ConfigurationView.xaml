@@ -9,12 +9,10 @@
         Title="textsmile.net" 
         ShowInTaskbar="True"
         WindowStartupLocation="CenterScreen"
-        Height="375" Width="275" ResizeMode="CanResize"
+        Height="380" Width="275" ResizeMode="CanResize"
         MaxHeight="800" MaxWidth="275"
         MinHeight="300" MinWidth="275"
-        WindowStyle="SingleBorderWindow"
-        Icon="/Resources/icon32x32.ico"
-        WindowState="Normal">
+        Icon="/Resources/icon32x32.ico">
 
     <Window.DataContext>
         <vm:ConfigurationViewModel/>
@@ -41,13 +39,21 @@
         </Grid.RowDefinitions>
         
         <Menu Grid.Row="0" VerticalAlignment="Top">
-            <MenuItem Header="Menu">
-                <MenuItem Header="Run at Windows startup" IsCheckable="True" Command="{Binding RunOnStartupCommand}"
+            <MenuItem Header="File">
+                <MenuItem Header="Save" Command="{Binding Commands.SaveCommand}"/>
+                <Separator/>
+                <MenuItem Header="Export" Command="{Binding Commands.ExportCommand}" IsEnabled="False"/>
+                <MenuItem Header="Import" Command="{Binding Commands.ImportCommand}" IsEnabled="False"/>
+                <Separator/>
+                <MenuItem Header="Quit" Command="{Binding Commands.QuitCommand}" />
+            </MenuItem>
+            <MenuItem Header="Options">
+                <MenuItem Header="Run at Windows startup" IsCheckable="True" Command="{Binding Commands.RunOnStartupCommand}"
                           IsChecked="{Binding IsRunOnStartup, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}"
                           CommandParameter="{Binding Path=IsChecked, RelativeSource={RelativeSource Self}}"/>
                 <Separator/>
-                <MenuItem Header="Help" Command="{Binding HelpCommand}"/>
-                <MenuItem Header="Quit" Command="{Binding QuitCommand}" />
+                <MenuItem Header="Help" Command="{Binding Commands.HelpCommand}"/>
+                <MenuItem Header="About" Command="{Binding Commands.AboutCommand}" IsEnabled="False"/>
             </MenuItem>
         </Menu>
 
@@ -67,8 +73,9 @@
                             <Button DockPanel.Dock="Right" Width="25" Height="25" Background="DarkRed" 
                                 Foreground="White" Content="x" Command="{Binding RemoveCommand}"/>
 
-                            <TextBox DockPanel.Dock="Left" FontFamily="Tahoma" TextWrapping="NoWrap" HorizontalAlignment="Stretch" Height="25" 
-                                 Text="{Binding Content, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FontSize="12" Padding="4">
+                            <TextBox DockPanel.Dock="Left"  TextWrapping="NoWrap" HorizontalAlignment="Stretch" Height="25" 
+                                 Text="{Binding Content, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                                     FontFamily="Tahoma" FontSize="12" Padding="4">
                             </TextBox>
                         </DockPanel>
                     </DataTemplate>
@@ -77,12 +84,14 @@
         </ScrollViewer>
 
         <StackPanel Grid.Row="2" Margin="1" Orientation="Vertical">
-            <Button HorizontalAlignment="Left" Content="Add smile" Command="{Binding AddCommand}" Height="18" Width="100" Margin="2"/>
+            <Button HorizontalAlignment="Left" Content="Add smile"
+                    Command="{Binding Commands.AddCommand}" Height="18" Width="100" Margin="2"/>
 
             <StackPanel Orientation="Horizontal">
                 <TextBlock Text="Hotkey" Width="70" TextAlignment="Center"/>
-                <TextBox Height="20" Width="191" CaretBrush="White" PreviewKeyDown="Hotkey_PreviewKeydDown"
-                         Text="{Binding HotkeyText, UpdateSourceTrigger=PropertyChanged}"/>
+                <TextBox Height="20" Width="191" PreviewKeyDown="Hotkey_PreviewKeydDown"
+                         Text="{Binding HotkeyText, UpdateSourceTrigger=PropertyChanged}">
+                </TextBox>
             </StackPanel>
         </StackPanel>
     </Grid>

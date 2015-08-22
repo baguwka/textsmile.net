@@ -29,6 +29,14 @@ namespace textsmile.net.Model.Smile {
          _items.Add(InstantiateSmile());
       }
 
+      public void AddSmile(string content) {
+         _items.Add(InstantiateSmile(content));
+      }
+
+      public void AddSmile(SmileItem smileItem) {
+         _items.Add(smileItem);
+      }
+
       public SmileItem InstantiateSmile() {
          return InstantiateSmile(string.Empty);
       }

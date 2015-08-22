@@ -6,18 +6,18 @@ namespace textsmile.net.Model {
    public class SaveLoadController {
       public const string WRITE_IF_CORRUPTED = "";
 
-      private readonly ISerializer _io;
-      private readonly IDataProvider _provider;
+      private readonly ISerializer _serializer;
+      private readonly IDataProvider _dataProvider;
 
-      public SaveLoadController([NotNull] ISerializer io, [NotNull] IDataProvider provider) {
-         if (io == null) {
-            throw new ArgumentNullException(nameof(io));
+      public SaveLoadController([NotNull] ISerializer serializer, [NotNull] IDataProvider dataProvider) {
+         if (serializer == null) {
+            throw new ArgumentNullException(nameof(serializer));
          }
-         if (provider == null) {
-            throw new ArgumentNullException(nameof(provider));
+         if (dataProvider == null) {
+            throw new ArgumentNullException(nameof(dataProvider));
          }
-         _io = io;
-         _provider = provider;
+         _serializer = serializer;
+         _dataProvider = dataProvider;
       }
 
       /// <summary>
@@ -35,7 +35,7 @@ namespace textsmile.net.Model {
          var serialized = string.Empty;
 
          try {
-            serialized = _io.Serialize(data);
+            serialized = _serializer.Serialize(data);
          }
          catch (DataCorruptedException ex) {
             var result = dataCorruptedHandler(ex);
@@ -44,7 +44,7 @@ namespace textsmile.net.Model {
             }
          }
 
-         _provider.Write(key, serialized);
+         _dataProvider.Write(key, serialized);
       }
 
       /// <summary>
@@ -59,19 +59,19 @@ namespace textsmile.net.Model {
 
          T data = null;
 
-         var readResult = _provider.Read(key);
+         var readResult = _dataProvider.Read(key);
 
          if (string.IsNullOrEmpty(readResult)) {
             return null;
          }
 
          try {
-            data = _io.Deserialize<T>(readResult);
+            data = _serializer.Deserialize<T>(readResult);
          }
          catch (DataCorruptedException ex) {
             var result = dataCorruptedHandler(ex);
             if (result) {
-               _provider.Write(key, WRITE_IF_CORRUPTED);
+               _dataProvider.Write(key, WRITE_IF_CORRUPTED);
             }
          }
 

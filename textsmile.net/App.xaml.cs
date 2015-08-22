@@ -43,8 +43,7 @@ namespace textsmile.net {
          Container.RegisterType<INotifyIconController, NotifyIconController>(new ContainerControlledLifetimeManager());
          Container.RegisterType<BackgroundService>(new ContainerControlledLifetimeManager());
          Container.RegisterType<SmileCollection>(new ContainerControlledLifetimeManager());
-         Container.RegisterType<IShortcutCreator, WSHShortcutCreator>();
-         //Container.RegisterType<CohesiveUnit>(new ContainerControlledLifetimeManager());
+         Container.RegisterType<IShortcutCreator, WSHShortcutCreator>(new ContainerControlledLifetimeManager());
 
          bool startMinimized = false;
          for (int i = 0; i != e.Args.Length; ++i) {
@@ -57,13 +56,13 @@ namespace textsmile.net {
       }
 
       private void CurrentOnDispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e) {
-         MessageBox.Show(e.Exception.Message + "\n\n" + e.Exception.StackTrace, "Exception", MessageBoxButton.OK, MessageBoxImage.Error);
+         MessageBox.Show(e.Exception.Message + "\n\n See dump at Windows Application Event Log", "Exception occured", MessageBoxButton.OK, MessageBoxImage.Error);
 
 #if !DEBUG
          e.Handled = true;
 #endif
 
-         Current.Shutdown();
+         Environment.FailFast("Exception occured", e.Exception);
       }
 
       private void onAppExit(object sender, ExitEventArgs exitEventArgs) {

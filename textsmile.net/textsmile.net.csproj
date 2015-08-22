@@ -38,7 +38,7 @@
     </StartupObject>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>Resources\icon32x32.ico</ApplicationIcon>
+    <ApplicationIcon>Resources\icon255x255.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="JetBrains.Annotations, Version=9.2.0.0, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
@@ -111,6 +111,7 @@
     <Compile Include="GlobalHotkey\HotkeyEventArgs.cs" />
     <Compile Include="GlobalHotkey\IWinApi.cs" />
     <Compile Include="GlobalHotkey\WinApi.cs" />
+    <Compile Include="MainSaveLoader.cs" />
     <Compile Include="Model\AppDataFolderProvider.cs" />
     <Compile Include="Model\DataCorruptedException.cs" />
     <Compile Include="GlobalHotkey\HotKeyManager.cs" />
@@ -120,7 +121,7 @@
     <Compile Include="Model\Shortcut\IShortcutCreator.cs" />
     <Compile Include="Model\NotifyIconController.cs" />
     <Compile Include="Model\SaveLoadJsonSerializer.cs" />
-    <Compile Include="Model\SaveData.cs" />
+    <Compile Include="Model\CommonSaveData.cs" />
     <Compile Include="Model\SaveLoadController.cs" />
     <Compile Include="Model\Shortcut\WSHShortcutCreator.cs" />
     <Compile Include="Model\SmartCollection.cs" />
@@ -129,6 +130,7 @@
     <Compile Include="UI\TrayContextMenu.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="VM\ConfigurationViewModelCommands.cs" />
     <Compile Include="VM\IVM.cs" />
     <Compile Include="VM\ConfigurationViewModel.cs" />
     <Compile Include="Model\Smile\SmileItem.cs" />
@@ -181,6 +183,7 @@
     <Resource Include="Resources\icon32x32.ico" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Resources\icon255x255.ico" />
     <Content Include="Resources\Source\textsmile.net icon.psd" />
   </ItemGroup>
   <ItemGroup>

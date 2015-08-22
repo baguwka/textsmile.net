@@ -20,13 +20,13 @@ namespace textsmile.net {
    [UsedImplicitly]
    public class BackgroundService {
       private readonly INotifyIconController _tray;
-      private readonly HotKeyManager _hotkeyManager;
+      private readonly HotKeyManager _hotKeyManager;
       private readonly SmileCollection _smiles;
       private readonly ConfigurationView _configView;
 
-      public BackgroundService(INotifyIconController tray, HotKeyManager hotkeyManager, SmileCollection smiles) {
+      public BackgroundService(INotifyIconController tray, HotKeyManager hotKeyManager, SmileCollection smiles) {
          _tray = tray;
-         _hotkeyManager = hotkeyManager;
+         _hotKeyManager = hotKeyManager;
          _smiles = smiles;
          _configView = new ConfigurationView();
       }
@@ -47,7 +47,7 @@ namespace textsmile.net {
             _configView.Activate();
          }
 
-         _hotkeyManager.KeyPressed += onHotkeyManagerKeyPressed;
+         _hotKeyManager.KeyPressed += onHotKeyManagerKeyPressed;
          _smiles.SmileClicked += onSmileClickRaised;
          _smiles.SmileRemoved += onSmileRemoveRaised;
       }
@@ -63,33 +63,15 @@ namespace textsmile.net {
          unload();
          _tray.Close();
 
-         _hotkeyManager.KeyPressed -= onHotkeyManagerKeyPressed;
+         _hotKeyManager.KeyPressed -= onHotKeyManagerKeyPressed;
          _smiles.SmileClicked -= onSmileClickRaised;
          _smiles.SmileRemoved -= onSmileRemoveRaised;
       }
 
       private void load() {
          AppSaveData data;
-         var sl = App.Container.Resolve<SaveLoadController>();
-         if (sl.TryLoad("textsmile.net main", out data,
-            exception => {
-               var result = MessageBox.Show("SaveData corrupted and cannot be loaded. " +
-                                            "\nWipe all save data to prevent this error next time? " +
-                                            "(Yes is recomended, but if you can restore it somehow manually, then select No)" +
-                                            $"\n\n\n Details:\n{exception.Message}" +
-                                            $"\n\n StackTrace:\n{exception.StackTrace}",
-                  "Error", MessageBoxButton.YesNo,
-                  MessageBoxImage.Error, MessageBoxResult.Yes);
 
-               switch (result) {
-                  case MessageBoxResult.Yes:
-                     return true;
-                  case MessageBoxResult.No:
-                     return false;
-                  default:
-                     return true;
-               }
-            })) {
+         if (MainAppSaveLoader.TryLoad(out data)) {
             if (data.Smiles != null) {
                LoadSmiles(data.Smiles.Select(_smiles.InstantiateSmile));
             }
@@ -98,38 +80,22 @@ namespace textsmile.net {
       }
 
       private void unload() {
-         var hotKey = _hotkeyManager.GetHotkey("toggle");
+         var hotKey = _hotKeyManager.GetHotkey("toggle");
 
-         var sl = App.Container.Resolve<SaveLoadController>();
-         sl.Save("textsmile.net main", new AppSaveData(_smiles.Items) {
+         var data = new AppSaveData(_smiles.Items) {
             Key = hotKey.Return(i => i.Key, Key.N),
             ModsKeys = hotKey.Return(h => h.Modifiers, ModifierKeys.Windows)
-         }, exception => {
-            var result = MessageBox.Show("SaveData corrupted and cannot be saved. " +
-                                         "\nBlock writing attempt to not to corrupt the save file?? " +
-                                         "(Yes is recomended, but if you can restore it somehow manually, then select No)" +
-                                         $"\n\n\n Details:\n{exception.Message}" +
-                                         $"\n\n StackTrace:\n{exception.StackTrace}",
-               "Error", MessageBoxButton.YesNo,
-               MessageBoxImage.Error, MessageBoxResult.Yes);
+         };
 
-            switch (result) {
-               case MessageBoxResult.Yes:
-                  return true;
-               case MessageBoxResult.No:
-                  return false;
-               default:
-                  return true;
-            }
-         });
+         MainAppSaveLoader.Save(data);
 
-         _hotkeyManager.Unregister("toggle");
+         _hotKeyManager.Unregister("toggle");
       }
 
       private void setHotkey(Key key, ModifierKeys mods) {
-         _hotkeyManager.Unregister("toggle");
+         _hotKeyManager.Unregister("toggle");
          var hotKey = new HotKey(key, mods);
-         _hotkeyManager.Register("toggle", hotKey);
+         _hotKeyManager.Register("toggle", hotKey);
       }
 
       private void onSmileClickRaised(object sender, SmileItem smileItem) {
@@ -155,7 +121,7 @@ namespace textsmile.net {
          _smiles.Load(smileItems);
       }
 
-      private void onHotkeyManagerKeyPressed(object sender, HotkeyEventArgs e) {
+      private void onHotKeyManagerKeyPressed(object sender, HotkeyEventArgs e) {
          var context = (ContextMenu)Application.Current.MainWindow.FindResource("SmilesContextMenu");
          context.IsOpen = false;
          context.PlacementTarget = Application.Current.MainWindow;
