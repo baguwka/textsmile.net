@@ -8,6 +8,7 @@ using Microsoft.Practices.Prism.Commands;
 using textsmile.net.GlobalHotkey;
 using textsmile.net.Model.Shortcut;
 using textsmile.net.Model.Smile;
+using textsmile.net.UI;
 
 namespace textsmile.net.VM {
    [UsedImplicitly]
@@ -28,6 +29,7 @@ namespace textsmile.net.VM {
 
          RunOnStartupCommand = new DelegateCommand<bool?>(StartupCommandExecute);
          HelpCommand = new DelegateCommand(showHelpCommandExecute);
+         CheckLastReleasesCommand = new DelegateCommand(checkLastReleasesExecute);
          AboutCommand = new DelegateCommand(aboutCommandExecute);
 
          AddCommand = new DelegateCommand(addCommandExecute);
@@ -40,6 +42,7 @@ namespace textsmile.net.VM {
 
       public ICommand RunOnStartupCommand { get; set; }
       public ICommand HelpCommand { get; set; }
+      public ICommand CheckLastReleasesCommand { get; set; }
       public ICommand AboutCommand { get; set; }
 
       public ICommand AddCommand { get; set; }
@@ -83,8 +86,13 @@ namespace textsmile.net.VM {
          MessageBox.Show(sb.ToString(), "Help", MessageBoxButton.OK, MessageBoxImage.Information);
       }
 
+      private void checkLastReleasesExecute() {
+         UrlHelper.OpenUrl(UrlHelper.RELEASES);
+      }
+
       private void aboutCommandExecute() {
-         throw new NotImplementedException();
+         var aboutView = new AboutView();
+         aboutView.ShowDialog();
       }
 
 

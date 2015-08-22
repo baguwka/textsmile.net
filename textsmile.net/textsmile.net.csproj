@@ -127,13 +127,22 @@
     <Compile Include="Model\SmartCollection.cs" />
     <Compile Include="Model\Smile\SmileCollection.cs" />
     <Compile Include="Model\WindowExtensions.cs" />
+    <Compile Include="UI\AboutView.xaml.cs">
+      <DependentUpon>AboutView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UI\TrayContextMenu.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="VersionHelper.cs" />
     <Compile Include="VM\ConfigurationViewModelCommands.cs" />
     <Compile Include="VM\IVM.cs" />
     <Compile Include="VM\ConfigurationViewModel.cs" />
     <Compile Include="Model\Smile\SmileItem.cs" />
+    <Compile Include="UrlHelper.cs" />
+    <Page Include="UI\AboutView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="UI\ConfigurationView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

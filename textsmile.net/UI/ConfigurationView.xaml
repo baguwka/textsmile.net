@@ -53,7 +53,9 @@
                           CommandParameter="{Binding Path=IsChecked, RelativeSource={RelativeSource Self}}"/>
                 <Separator/>
                 <MenuItem Header="Help" Command="{Binding Commands.HelpCommand}"/>
-                <MenuItem Header="About" Command="{Binding Commands.AboutCommand}" IsEnabled="False"/>
+                <Separator/>
+                <MenuItem Header="Check last releases" Command="{Binding Commands.CheckLastReleasesCommand}"/>
+                <MenuItem Header="About" Command="{Binding Commands.AboutCommand}"/>
             </MenuItem>
         </Menu>
 

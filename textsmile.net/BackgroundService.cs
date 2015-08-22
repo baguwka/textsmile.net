@@ -7,14 +7,10 @@ using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using JetBrains.Annotations;
-using Microsoft.Practices.Unity;
 using textsmile.net.GlobalHotkey;
 using textsmile.net.Model;
 using textsmile.net.Model.Smile;
 using textsmile.net.UI;
-using Application = System.Windows.Application;
-using Clipboard = System.Windows.Clipboard;
-using MessageBox = System.Windows.MessageBox;
 
 namespace textsmile.net {
    [UsedImplicitly]
