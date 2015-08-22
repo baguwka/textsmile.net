@@ -19,7 +19,7 @@ namespace textsmile.net {
             return;
          }
 
-         var result = MessageBox.Show("This will be opened in your default borwser, proceed?", "Open in browser request",
+         var result = MessageBox.Show($"This will be opened in your default borwser, proceed?\n\n{url}", "Open in browser request",
             MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.Yes);
 
          if (result == MessageBoxResult.Yes) {
