@@ -1,6 +1,7 @@
 ﻿using System.Monads;
 using System.Windows.Forms;
 using JetBrains.Annotations;
+using textsmile.net.Properties;
 
 namespace textsmile.net.Model {
    [UsedImplicitly]
@@ -17,7 +18,7 @@ namespace textsmile.net.Model {
 
          Tray = new NotifyIcon {
             Text = name,
-            Icon = Properties.Resources.icon16x16,
+            Icon = Resources.icon16x16,
             ContextMenu = contextMenu,
             Visible = true
          };

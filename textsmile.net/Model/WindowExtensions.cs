@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 using System.Windows;
+using System.Windows.Interop;
 
 namespace textsmile.net.Model {
    internal static class WindowExtensions {
@@ -16,14 +17,14 @@ namespace textsmile.net.Model {
       extern private static int SetWindowLong(IntPtr hwnd, int index, int value);
 
       internal static void HideMinimizeAndMaximizeButtons(this Window window) {
-         IntPtr hwnd = new System.Windows.Interop.WindowInteropHelper(window).Handle;
+         IntPtr hwnd = new WindowInteropHelper(window).Handle;
          var currentStyle = GetWindowLong(hwnd, GWL_STYLE);
 
          SetWindowLong(hwnd, GWL_STYLE, (currentStyle & ~WS_MAXIMIZEBOX & ~WS_MINIMIZEBOX));
       }
 
       internal static void HideMaximizeButton(this Window window) {
-         IntPtr hwnd = new System.Windows.Interop.WindowInteropHelper(window).Handle;
+         IntPtr hwnd = new WindowInteropHelper(window).Handle;
          var currentStyle = GetWindowLong(hwnd, GWL_STYLE);
 
          SetWindowLong(hwnd, GWL_STYLE, (currentStyle & ~WS_MAXIMIZEBOX));

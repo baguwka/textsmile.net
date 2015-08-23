@@ -4,7 +4,6 @@ using System.Windows;
 using System.Windows.Input;
 using textsmile.net.Model;
 using textsmile.net.VM;
-using KeyEventArgs = System.Windows.Input.KeyEventArgs;
 
 namespace textsmile.net.UI {
    /// <summary>
