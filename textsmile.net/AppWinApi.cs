@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using JetBrains.Annotations;
 
 namespace textsmile.net {
    public static class AppWinApi {
       [DllImport("user32")]
       public static extern int RegisterWindowMessage(string message);
 
+      [StringFormatMethod("format")]
       public static int RegisterWindowMessage(string format, params object[] args) {
          var message = string.Format(format, args);
          return RegisterWindowMessage(message);
