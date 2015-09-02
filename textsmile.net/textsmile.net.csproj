@@ -106,6 +106,9 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="AppSaveData.cs" />
+    <Compile Include="LinqExtensions.cs" />
+    <Compile Include="SingleInstance.cs" />
+    <Compile Include="AppWinApi.cs" />
     <Compile Include="BackgroundService.cs" />
     <Compile Include="GlobalHotkey\HotKey.cs" />
     <Compile Include="GlobalHotkey\HotkeyEventArgs.cs" />
@@ -127,6 +130,7 @@
     <Compile Include="Model\SmartCollection.cs" />
     <Compile Include="Model\Smile\SmileCollection.cs" />
     <Compile Include="Model\WindowExtensions.cs" />
+    <Compile Include="ProgramInfo.cs" />
     <Compile Include="UI\AboutView.xaml.cs">
       <DependentUpon>AboutView.xaml</DependentUpon>
     </Compile>

@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Interop;
 using textsmile.net.Model;
 using textsmile.net.VM;
 
@@ -24,6 +25,23 @@ namespace textsmile.net.UI {
             Activate();
             Focus();
          }
+      }
+
+      protected override void OnSourceInitialized(EventArgs e) {
+         base.OnSourceInitialized(e);
+         var source = (HwndSource)PresentationSource.FromVisual(this);
+         source?.AddHook(WndProc);
+      }
+
+      private IntPtr WndProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled) {
+         if (msg == SingleInstance.WM_SHOWFIRSTINSTANCE) {
+            Show();
+            WindowState = WindowState.Normal;
+            Activate();
+            Focus();
+         }
+
+         return IntPtr.Zero;
       }
 
       private void onLoaded(object sender, RoutedEventArgs e) {
