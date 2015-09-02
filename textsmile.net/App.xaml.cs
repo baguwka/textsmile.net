@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
-using System.Linq;
 using System.Windows;
 using System.Windows.Threading;
 using Microsoft.Practices.Unity;
@@ -23,7 +21,9 @@ namespace textsmile.net {
       }
 
       private void CompositionRoot(object sender, StartupEventArgs e) {
-         if (isAppAlreadyRunning()) {
+         if (SingleInstance.IsOnlyInstance() == false) {
+            SingleInstance.ShowFirstInstance();
+            Current.Shutdown();
             return;
          }
 
@@ -67,24 +67,6 @@ namespace textsmile.net {
 
       private void onAppExit(object sender, ExitEventArgs exitEventArgs) {
          Container.Resolve<BackgroundService>().Close();
-      }
-
-      //todo: use mutex
-      //todo: WindowState.Normal on existing app instance, no MessageBox
-      private bool isAppAlreadyRunning() {
-         var currentProcess = Process.GetCurrentProcess();
-
-         var processes = Process.GetProcessesByName(currentProcess.ProcessName);
-
-         if (processes.Any(p => p.Id != currentProcess.Id)) {
-
-            MessageBox.Show("Another instance is already running.", "Application already running",
-            MessageBoxButton.OK, MessageBoxImage.Exclamation);
-
-            Current.Shutdown();
-            return true;
-         }
-         return false;
       }
    }
 }
